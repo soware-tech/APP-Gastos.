@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -82,16 +81,6 @@
 
     <!-- APP SHELL CONTAINER (MOCKUP DE SMARTPHONE) -->
     <div class="app-shell bg-white flex flex-col w-full min-h-screen sm:min-h-0 pb-24 transition-all-custom">
-        
-        <!-- BARRA DE STATUS SIMULADA (IOS/ANDROID FEEL) -->
-        <div class="hidden sm:flex justify-between items-center px-6 pt-3 pb-1 text-slate-400 text-xs font-semibold bg-emerald-800 text-white select-none">
-            <span id="status-bar-time">12:45</span>
-            <div class="flex items-center gap-1.5">
-                <i data-lucide="signal" class="w-3.5 h-3.5"></i>
-                <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
-                <i data-lucide="battery" class="w-4 h-4"></i>
-            </div>
-        </div>
 
         <!-- HEADER ESTILO NATIVO -->
         <header class="bg-emerald-800 text-white sticky top-0 z-40 px-5 py-4 shadow-md">
@@ -101,7 +90,7 @@
                         <i data-lucide="wallet" class="w-5 h-5 text-emerald-300"></i>
                     </div>
                     <div>
-                        <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">App de Gastos</h1>
+                        <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
                         <p class="text-base font-extrabold tracking-tight" id="display-date-title">Janeiro, 2026</p>
                     </div>
                 </div>
@@ -377,7 +366,7 @@
                 <!-- CONFIGURAÇÕES ADICIONAIS -->
                 <section class="bg-red-50 border border-red-200 p-5 rounded-3xl space-y-3 shadow-sm">
                     <h4 class="text-[10px] font-black text-red-800 uppercase tracking-[0.2em]">Danger Zone</h4>
-                    <p class="text-[10px] text-red-600">Zerar todos os dados do aplicativo e restaurar os dados demonstrativos de fábrica.</p>
+                    <p class="text-[10px] text-red-600">Zerar todos os dados do aplicativo e restaurar as configurações padrão de fábrica.</p>
                     <button onclick="resetDataAndReload()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-xl text-xs uppercase transition-all tap-feedback">
                         Reiniciar App
                     </button>
@@ -526,12 +515,6 @@
         // --- INICIALIZAÇÃO ---
         window.addEventListener('DOMContentLoaded', () => {
             updateUI();
-            
-            // Simulação de relógio do celular
-            setInterval(() => {
-                const d = new Date();
-                document.getElementById('status-bar-time').innerText = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            }, 1000);
         });
 
         // --- FUNÇÕES DE PERSISTÊNCIA ---
@@ -623,7 +606,7 @@
 
             let estabelecimento = "Estabelecimento Desconhecido";
             let valor = 0.00;
-            let usuario = users[0]?.name || "Ana Silva (Mãe)";
+            let usuario = users[0]?.name || "Usuário";
             let categoria = "Mercado"; 
             let dataCompra = new Date().toISOString().split('T')[0];
             let cartaoDetectado = "";
@@ -1232,7 +1215,7 @@
                 const parsedData = {
                     estabelecimento: estabelecimento,
                     valor: parseFloat(value.toFixed(2)) || 158.45, // Fallback do mock se não achar valor na URL
-                    usuario: users[0]?.name || "Ana Silva (Mãe)",
+                    usuario: users[0]?.name || "Usuário",
                     categoria: "Mercado",
                     data: dateStr,
                     cartao: ""
@@ -1536,6 +1519,7 @@
             }
         }
 
+        // Criar Usuário
         function handleCreateUser() {
             const inputName = document.getElementById('new-user-input');
             const inputCard = document.getElementById('new-user-card');
@@ -1608,6 +1592,7 @@
             }
         }
 
+        // Ocultar/Exibir elementos
         function toggleElement(id, show) {
             const el = document.getElementById(id);
             if (show) {
