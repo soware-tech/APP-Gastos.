@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html lang="pt-br">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CG - Controle de Gastos mobile (PWA Native Look)</title>
+    <title>CG - Controle de Gastos (Clean View)</title>
     <!-- Tailwind CSS para estilização moderna e rápida -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons para iconografia nativa e consistente -->
@@ -15,7 +17,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; /* Slate 900 de fundo para destacar o mockup */
+            background-color: #0f172a; /* Slate 900 de fundo para destacar o container */
         }
         
         @keyframes scan-line {
@@ -38,7 +40,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Mockup elegante de celular para visualização em telas largas */
+        /* Ajustado para remover a borda preta espessa e o aspecto de smartphone físico */
         @media (min-width: 640px) {
             .app-shell {
                 max-width: 420px;
@@ -46,9 +48,8 @@
                 min-height: 850px;
                 height: 85vh;
                 position: relative;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.1);
-                border: 12px solid #1e293b;
-                border-radius: 48px;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+                border-radius: 24px; /* Cantos arredondados suaves para efeito card limpo */
                 background-color: #ffffff;
                 overflow: hidden;
             }
@@ -57,12 +58,12 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                border-bottom-left-radius: 36px;
-                border-bottom-right-radius: 36px;
+                border-bottom-left-radius: 24px;
+                border-bottom-right-radius: 24px;
             }
             .fixed-scanner-modal {
                 position: absolute !important;
-                border-radius: 36px;
+                border-radius: 24px;
             }
         }
 
@@ -78,7 +79,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen text-slate-900 overflow-x-hidden">
 
-    <!-- APP SHELL CONTAINER (MOCKUP DE SMARTPHONE) -->
+    <!-- APP SHELL CONTAINER (VISÃO LIMPA DE CARTÃO CENTRALIZADO) -->
     <div class="app-shell bg-white flex flex-col w-full min-h-screen sm:min-h-0 pb-24 transition-all-custom">
 
         <!-- HEADER ESTILO NATIVO -->
@@ -86,7 +87,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <div class="bg-white/10 p-2.5 rounded-2xl backdrop-blur-md">
-                        <i data-lucide="wallet" class="w-5 h-5 text-emerald-300"></i>
+                        <i data-lucide="calculator" class="w-5 h-5 text-emerald-300"></i>
                     </div>
                     <div>
                         <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
@@ -374,10 +375,10 @@
 
         </main>
 
-        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES -->
+        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES (NATIVE BOTTOM BAR) -->
         <nav class="fixed-bottom-nav bg-white/95 border-t border-slate-100 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-md max-w-[420px] mx-auto shadow-lg">
             <div class="grid grid-cols-5 h-20 items-center justify-center text-center">
-                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tab-active tap-feedback">
+                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tap-feedback">
                     <i data-lucide="plus-circle" class="w-5.5 h-5.5"></i>
                     <span class="text-[8px] uppercase tracking-wider">Lançar</span>
                 </button>
@@ -597,6 +598,7 @@
             lucide.createIcons();
         }
 
+        // --- STREAMING_CHUNK: Implementando o motor de extração OCR calibrado... ---
         // --- MOTOR DE EXTRAÇÃO EXCLUSIVO VIA REGEX CALIBRADO ---
         function regexMappingParser(rawText) {
             if (!rawText) return null;
@@ -610,13 +612,14 @@
             let dataCompra = new Date().toISOString().split('T')[0];
             let cartaoDetectado = "";
 
-            // 1. REGEX DE CARTÃO: 4 dígitos finais precedidos de exatamente 14 asteriscos (Anexo 4)
+            // 1. REGEX DE CARTÃO: últimos 4 dígitos pós exatamente 14 asteriscos (Anexo 2)
             const asteriskCardRegex = /\*{14}(\d{4})\b/;
             const asteriskMatches = rawText.match(asteriskCardRegex);
 
             if (asteriskMatches && asteriskMatches[1]) {
                 cartaoDetectado = asteriskMatches[1];
             } else {
+                // Fallback genérico caso a qualidade da foto mude levemente a contagem de asteriscos
                 const fallbackCardRegex = /(?:\*{10,}|X{10,})\s*(\d{4})\b/i;
                 const fallbackMatches = rawText.match(fallbackCardRegex);
                 if (fallbackMatches && fallbackMatches[1]) {
@@ -668,7 +671,8 @@
                 }
             }
 
-            // 3. REGEX DO ESTABELECIMENTO: sempre junto com o número de CPF ou CNPJ (Anexo 2)
+            // 3. REGEX DO ESTABELECIMENTO: sempre junto com o número de CPF ou CNPJ (Anexo 4)
+            // Localiza a linha do CPF/CNPJ e extrai a linha imediatamente anterior (nome)
             const cpfRegex = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
             const cnpjRegex = /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/;
             
@@ -695,6 +699,7 @@
                     }
                 }
             } else {
+                // Fallback legado caso não encontre CPF ou CNPJ na nota
                 const blacklistRegex = /(cnpj|ie|im|telefone|tel|rua|av\.|avenida|bairro|cep|fone|data|hora|cupom|fiscal|extrato|comprovante|venda|original|via|coo|ccf|val|pago|danfe|documento|auxiliar|nfc|site|sefaz|www\.|emiss|operador|caixa|terminal|autentic|filiacao|adquirente|transacao|credito|debito|tef|pos|mastercard|visa|elo|hipercard|label|aid|nsu|snpos|arqc)/i;
                 const phoneCnpjRegex = /(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{4,5}-\d{4})/g;
 
@@ -718,51 +723,49 @@
                 }
             }
 
-            // 4. VALOR DA NOTA: Esse dado é o número que sempre está em destaque no cupom (Anexo 3)
-            // Tratamos variações comuns de OCR para o símbolo "R$" (como RS, R5, H$, K$, P$, B$)
-            let textNormalizedForValue = rawText
+            // 4. VALOR DA NOTA: sempre pós um R$ com foco total de precisão (Anexo 3)
+            // Tratamos variações de falhas comuns de leitura no símbolo "R$" (ex: RS, R5, H$, etc)
+            let rawNormalizedText = rawText
                 .replace(/[RH5KPSB]{1,2}\s*[\$S5]\s*/g, 'R$ ')
                 .replace(/R\s+[\$S5]/g, 'R$');
 
-            // Regex de alta sensibilidade para encontrar valores monetários após o símbolo "R$"
-            // Aceita quebras de linha e espaços múltiplos entre o símbolo e o número
-            const highConfidenceValueRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
-            let rsValues = [];
-            let rsMatch;
-            
-            while ((rsMatch = highConfidenceValueRegex.exec(textNormalizedForValue)) !== null) {
-                const val = parseNumber(rsMatch[1]);
-                if (val > 0 && val < 99999) {
-                    rsValues.push(val);
-                }
-            }
+            const highConfidenceValueRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/i;
+            const rsMatch = rawNormalizedText.match(highConfidenceValueRegex);
 
-            if (rsValues.length > 0) {
-                // O valor em destaque do cupom é prioritariamente o primeiro/principal associado ao R$
-                valor = rsValues[0];
+            if (rsMatch && rsMatch[1]) {
+                valor = parseNumber(rsMatch[1]);
             } else {
-                // Fallback inteligente: Busca qualquer padrão numérico de moeda (ex: "10,00" ou "1.250,50")
-                // que não esteja associado a datas ou CPFs/CNPJs e prioriza o de maior destaque
-                const genericPriceRegex = /\b(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})\b/g;
-                let candidateValues = [];
-                let genericMatch;
-                
-                while ((genericMatch = genericPriceRegex.exec(rawText)) !== null) {
-                    const val = parseNumber(genericMatch[1]);
-                    // Filtra para evitar capturar frações de CPF/CNPJ ou datas
-                    const contextStart = Math.max(0, genericMatch.index - 8);
-                    const contextEnd = Math.min(rawText.length, genericMatch.index + genericMatch[1].length + 8);
-                    const contextStr = rawText.substring(contextStart, contextEnd);
-                    
-                    const looksLikeCpfOrDate = /[\/\.-]\d{2,4}/.test(contextStr) || /\d{3,}[\.-]/.test(contextStr);
-                    
-                    if (val > 0 && val < 99999 && !looksLikeCpfOrDate) {
-                        candidateValues.push(val);
+                // Fallback genérico de valor total caso o "R$" falhe na leitura OCR
+                const priceRegex = /(?:r\$|rs\$|\$)?\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
+                const totalKeywords = /(total|pago|pagar|subtotal|import|valor|liquido|debito|credito|vlr tot|vlr)/i;
+                let potentialValues = [];
+
+                for (const line of lines) {
+                    if (totalKeywords.test(line)) {
+                        if (line.replace(/[^\d]/g, '').length > 20) continue; 
+                        
+                        const matchedPrices = line.match(priceRegex);
+                        if (matchedPrices) {
+                            matchedPrices.forEach(str => {
+                                const val = parseNumber(str);
+                                if (val > 0 && val < 9999) potentialValues.unshift(val);
+                            });
+                        }
                     }
                 }
 
-                if (candidateValues.length > 0) {
-                    valor = candidateValues[0];
+                if (potentialValues.length === 0) {
+                    const allPrices = rawText.match(priceRegex);
+                    if (allPrices) {
+                        allPrices.forEach(str => {
+                            const val = parseNumber(str);
+                            if (val > 0 && val < 5000) potentialValues.push(val);
+                        });
+                    }
+                }
+
+                if (potentialValues.length > 0) {
+                    valor = Math.max(...potentialValues);
                 }
             }
 
@@ -824,7 +827,7 @@
             return parseFloat(cleaned) || 0;
         }
 
-
+        // --- STREAMING_CHUNK: Processando e aprovando os lançamentos pendentes... ---
         // --- PROCESSAMENTO DE PENDENCIAS ---
         function addPendingItem(data) {
             if (!data) return;
@@ -1013,6 +1016,7 @@
             playSuccessSound();
         }
 
+        // --- STREAMING_CHUNK: Renderizando extratos e relatórios de transações... ---
         // --- RENDERIZAÇÃO DA LISTA DE EXTRATO (TRANSAÇÕES) ---
         function renderExpensesList() {
             const container = document.getElementById('transactions-list');
@@ -1086,7 +1090,7 @@
                 if (parsedData && (parsedData.valor > 0 || parsedData.estabelecimento !== "Estabelecimento Desconhecido")) {
                     addPendingItem(parsedData);
                 } else {
-                    showToast("OCR completo, mas sem dados suficientes estruturados.");
+                    showToast("OCR completo, mas sem dados estruturados estruturados.");
                 }
             } catch (err) {
                 console.error(err);
@@ -1241,7 +1245,7 @@
             }, 1000);
         }
 
-
+        // --- STREAMING_CHUNK: Integrando as funções do scanner de câmera... ---
         // --- GESTÃO DE SCANNER / CÂMERA AO VIVO ---
         async function startScanner() {
             const modal = document.getElementById('scanner-modal');
@@ -1440,6 +1444,7 @@
             }).join('');
         }
 
+        // --- STREAMING_CHUNK: Editando as abas e menus de controle de ajustes... ---
         // --- AJUSTES DO PAINEL DE CONTROLE ---
         function renderConfigLists() {
             const userList = document.getElementById('users-config-list');
