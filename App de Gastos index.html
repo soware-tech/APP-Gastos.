@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -376,10 +375,10 @@
 
         </main>
 
-        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES (NATIVE BOTTOM BAR) -->
+        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES -->
         <nav class="fixed-bottom-nav bg-white/95 border-t border-slate-100 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-md max-w-[420px] mx-auto shadow-lg">
             <div class="grid grid-cols-5 h-20 items-center justify-center text-center">
-                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tap-feedback">
+                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tab-active tap-feedback">
                     <i data-lucide="plus-circle" class="w-5.5 h-5.5"></i>
                     <span class="text-[8px] uppercase tracking-wider">Lançar</span>
                 </button>
@@ -612,14 +611,14 @@
             let dataCompra = new Date().toISOString().split('T')[0];
             let cartaoDetectado = "";
 
-            // 1. REGEX DE CARTÃO (Final com 4 dígitos)
-            const asteriskCardRegex = /(?:\*{2,}|X{2,})\s*(\d{4})\b/i;
+            // 1. REGEX DE CARTÃO: 4 dígitos finais precedidos de exatamente 14 asteriscos (Anexo 4)
+            const asteriskCardRegex = /\*{14}(\d{4})\b/;
             const asteriskMatches = rawText.match(asteriskCardRegex);
 
             if (asteriskMatches && asteriskMatches[1]) {
                 cartaoDetectado = asteriskMatches[1];
             } else {
-                const fallbackCardRegex = /(?:cartao|cartão|final|via|credito|debito|mastercard|visa)\D{0,10}(\d{4})\b/i;
+                const fallbackCardRegex = /(?:\*{10,}|X{10,})\s*(\d{4})\b/i;
                 const fallbackMatches = rawText.match(fallbackCardRegex);
                 if (fallbackMatches && fallbackMatches[1]) {
                     cartaoDetectado = fallbackMatches[1];
@@ -635,7 +634,7 @@
                 }
             }
 
-            // 2. REGEX DE DATA DO CUPOM
+            // 2. REGEX DE DATA DO CUPOM: segue como dia, mês e ano (Anexo 1)
             const ptMonthDateRegex = /\b(\d{1,2})[\/\.-](jan|fev|mar|abr|mai|may|jun|jul|ago|set|out|nov|dez)[^\d\s]*[\/\.-](\d{2,4})\b/i;
             const ptMonthMatch = rawText.match(ptMonthDateRegex);
 
@@ -670,87 +669,101 @@
                 }
             }
 
-            // 3. REGEX DO ESTABELECIMENTO
-            const blacklistRegex = /(cnpj|ie|im|telefone|tel|rua|av\.|avenida|bairro|cep|fone|data|hora|cupom|fiscal|extrato|comprovante|venda|original|via|coo|ccf|val|pago|danfe|documento|auxiliar|nfc|site|sefaz|www\.|emiss|operador|caixa|terminal|autentic|filiacao|adquirente|transacao|credito|debito|tef|pos|mastercard|visa|elo|hipercard|label|aid|nsu|snpos|arqc)/i;
-            const phoneCnpjRegex = /(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{4,5}-\d{4})/g;
-
-            let candidateName = "";
-            for (const line of lines) {
-                const cleanLine = line.trim();
-                if (cleanLine.length > 3 && 
-                    /^[A-Z\s\.\-\&\(\)\/]+$/.test(cleanLine) && 
-                    cleanLine.split(/\s+/).length >= 2 &&
-                    !blacklistRegex.test(cleanLine) && 
-                    !phoneCnpjRegex.test(cleanLine) &&
-                    !/\d{2}\/\d{2}\/\d{4}/.test(cleanLine)) {
-                    
-                    candidateName = cleanLine;
+            // 3. REGEX DO ESTABELECIMENTO: sempre junto com o número de CPF ou CNPJ (Anexo 2)
+            const cpfRegex = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
+            const cnpjRegex = /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/;
+            
+            let cpfCnpjIndex = -1;
+            for (let i = 0; i < lines.length; i++) {
+                if (cpfRegex.test(lines[i]) || cnpjRegex.test(lines[i]) || lines[i].toLowerCase().includes("cpf") || lines[i].toLowerCase().includes("cnpj")) {
+                    cpfCnpjIndex = i;
                     break;
                 }
             }
 
-            if (!candidateName) {
-                for (let i = 0; i < Math.min(lines.length, 12); i++) {
-                    const currentLine = lines[i].trim();
-                    if (currentLine.length > 2 && 
-                        !/^\d+$/.test(currentLine) && 
-                        !blacklistRegex.test(currentLine) && 
-                        !phoneCnpjRegex.test(currentLine) &&
-                        !/\d{2}\/\d{2}\/\d{4}/.test(currentLine)) {
+            if (cpfCnpjIndex !== -1) {
+                if (cpfCnpjIndex > 0) {
+                    let candidate = lines[cpfCnpjIndex - 1].trim();
+                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+                    if (candidate.length > 2) {
+                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                    }
+                } else if (cpfCnpjIndex < lines.length - 1) {
+                    let candidate = lines[cpfCnpjIndex + 1].trim();
+                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+                    if (candidate.length > 2) {
+                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                    }
+                }
+            } else {
+                const blacklistRegex = /(cnpj|ie|im|telefone|tel|rua|av\.|avenida|bairro|cep|fone|data|hora|cupom|fiscal|extrato|comprovante|venda|original|via|coo|ccf|val|pago|danfe|documento|auxiliar|nfc|site|sefaz|www\.|emiss|operador|caixa|terminal|autentic|filiacao|adquirente|transacao|credito|debito|tef|pos|mastercard|visa|elo|hipercard|label|aid|nsu|snpos|arqc)/i;
+                const phoneCnpjRegex = /(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{4,5}-\d{4})/g;
+
+                let candidateName = "";
+                for (const line of lines) {
+                    const cleanLine = line.trim();
+                    if (cleanLine.length > 3 && 
+                        /^[A-Z\s\.\-\&\(\)\/]+$/.test(cleanLine) && 
+                        cleanLine.split(/\s+/).length >= 2 &&
+                        !blacklistRegex.test(cleanLine) && 
+                        !phoneCnpjRegex.test(cleanLine) &&
+                        !/\d{2}\/\d{2}\/\d{4}/.test(cleanLine)) {
                         
-                        candidateName = currentLine;
+                        candidateName = cleanLine;
                         break;
                     }
                 }
+                if (candidateName) {
+                    candidateName = candidateName.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+                    estabelecimento = candidateName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                }
             }
 
-            if (candidateName) {
-                candidateName = candidateName.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
-                estabelecimento = candidateName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-            }
+            // 4. VALOR DA NOTA: Esse dado é o número que sempre está em destaque no cupom (Anexo 3)
+            // Tratamos variações comuns de OCR para o símbolo "R$" (como RS, R5, H$, K$, P$, B$)
+            let textNormalizedForValue = rawText
+                .replace(/[RH5KPSB]{1,2}\s*[\$S5]\s*/g, 'R$ ')
+                .replace(/R\s+[\$S5]/g, 'R$');
 
-            // 4. VALOR DA NOTA
-            const rsRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
+            // Regex de alta sensibilidade para encontrar valores monetários após o símbolo "R$"
+            // Aceita quebras de linha e espaços múltiplos entre o símbolo e o número
+            const highConfidenceValueRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
             let rsValues = [];
             let rsMatch;
-            while ((rsMatch = rsRegex.exec(rawText)) !== null) {
+            
+            while ((rsMatch = highConfidenceValueRegex.exec(textNormalizedForValue)) !== null) {
                 const val = parseNumber(rsMatch[1]);
-                if (val > 0 && val < 9999) rsValues.push(val);
+                if (val > 0 && val < 99999) {
+                    rsValues.push(val);
+                }
             }
 
             if (rsValues.length > 0) {
-                valor = rsValues[0]; 
+                // O valor em destaque do cupom é prioritariamente o primeiro/principal associado ao R$
+                valor = rsValues[0];
             } else {
-                const priceRegex = /(?:r\$|rs\$|\$)?\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
-                const totalKeywords = /(total|pago|pagar|subtotal|import|valor|liquido|debito|credito|vlr tot|vlr)/i;
-                let potentialValues = [];
-
-                for (const line of lines) {
-                    if (totalKeywords.test(line)) {
-                        if (line.replace(/[^\d]/g, '').length > 20) continue; 
-                        
-                        const matchedPrices = line.match(priceRegex);
-                        if (matchedPrices) {
-                            matchedPrices.forEach(str => {
-                                const val = parseNumber(str);
-                                if (val > 0 && val < 9999) potentialValues.unshift(val);
-                            });
-                        }
+                // Fallback inteligente: Busca qualquer padrão numérico de moeda (ex: "10,00" ou "1.250,50")
+                // que não esteja associado a datas ou CPFs/CNPJs e prioriza o de maior destaque
+                const genericPriceRegex = /\b(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})\b/g;
+                let candidateValues = [];
+                let genericMatch;
+                
+                while ((genericMatch = genericPriceRegex.exec(rawText)) !== null) {
+                    const val = parseNumber(genericMatch[1]);
+                    // Filtra para evitar capturar frações de CPF/CNPJ ou datas
+                    const contextStart = Math.max(0, genericMatch.index - 8);
+                    const contextEnd = Math.min(rawText.length, genericMatch.index + genericMatch[1].length + 8);
+                    const contextStr = rawText.substring(contextStart, contextEnd);
+                    
+                    const looksLikeCpfOrDate = /[\/\.-]\d{2,4}/.test(contextStr) || /\d{3,}[\.-]/.test(contextStr);
+                    
+                    if (val > 0 && val < 99999 && !looksLikeCpfOrDate) {
+                        candidateValues.push(val);
                     }
                 }
 
-                if (potentialValues.length === 0) {
-                    const allPrices = rawText.match(priceRegex);
-                    if (allPrices) {
-                        allPrices.forEach(str => {
-                            const val = parseNumber(str);
-                            if (val > 0 && val < 5000) potentialValues.push(val);
-                        });
-                    }
-                }
-
-                if (potentialValues.length > 0) {
-                    valor = Math.max(...potentialValues);
+                if (candidateValues.length > 0) {
+                    valor = candidateValues[0];
                 }
             }
 
@@ -1071,10 +1084,10 @@
             try {
                 const text = await performLocalOCR(file);
                 const parsedData = regexMappingParser(text);
-                if (parsedData && parsedData.valor > 0) {
+                if (parsedData && (parsedData.valor > 0 || parsedData.estabelecimento !== "Estabelecimento Desconhecido")) {
                     addPendingItem(parsedData);
                 } else {
-                    showToast("OCR completo, mas sem valores detectados.");
+                    showToast("OCR completo, mas sem dados suficientes estruturados.");
                 }
             } catch (err) {
                 console.error(err);
@@ -1215,7 +1228,7 @@
 
                 const parsedData = {
                     estabelecimento: estabelecimento,
-                    valor: parseFloat(value.toFixed(2)) || 158.45, // Fallback do mock se não achar valor na URL
+                    valor: parseFloat(value.toFixed(2)) || 158.45, 
                     usuario: users[0]?.name || "Usuário",
                     categoria: "Mercado",
                     data: dateStr,
