@@ -91,7 +91,7 @@
                         <i data-lucide="calculator" class="w-5 h-5 text-emerald-300"></i>
                     </div>
                     <div>
-                        <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
+                        <h1 class="text-[8px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
                         <p class="text-base font-extrabold tracking-tight" id="display-date-title">Janeiro, 2026</p>
                     </div>
                 </div>
