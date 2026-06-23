@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +16,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; /* Slate 900 de fundo */
+            background-color: #0f172a; /* Slate 900 de fundo para destacar o mockup */
         }
         
         @keyframes scan-line {
@@ -40,16 +39,15 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Mockup elegante de celular para visualização em telas largas */
+        /* Mockup elegante de celular redimensionado para 320px */
         @media (min-width: 640px) {
             .app-shell {
-                max-width: 420px;
+                max-width: 320px; /* Redimensionado para 320px */
                 margin: 40px auto;
-                min-height: 850px;
+                min-height: 750px;
                 height: 85vh;
                 position: relative;
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.1);
-                border: 12px solid #1e293b;
                 border-radius: 48px;
                 background-color: #ffffff;
                 overflow: hidden;
@@ -80,146 +78,146 @@
 </head>
 <body class="flex items-center justify-center min-h-screen text-slate-900 overflow-x-hidden">
 
-    <!-- APP SHELL CONTAINER (MOCKUP DE SMARTPHONE) -->
+    <!-- APP SHELL CONTAINER (MOCKUP DE SMARTPHONE COESIVO COM 320PX) -->
     <div class="app-shell bg-white flex flex-col w-full min-h-screen sm:min-h-0 pb-24 transition-all-custom">
 
         <!-- HEADER ESTILO NATIVO -->
-        <header class="bg-emerald-800 text-white sticky top-0 z-40 px-5 py-4 shadow-md">
+        <header class="bg-emerald-800 text-white sticky top-0 z-40 px-4 py-4 shadow-md">
             <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="bg-white/10 p-2.5 rounded-2xl backdrop-blur-md">
-                        <i data-lucide="calculator" class="w-5 h-5 text-emerald-300"></i>
+                <div class="flex items-center gap-2">
+                    <div class="bg-white/10 p-2 rounded-xl backdrop-blur-md">
+                        <i data-lucide="calculator" class="w-4 h-4 text-emerald-300"></i>
                     </div>
                     <div>
-                        <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
-                        <p class="text-base font-extrabold tracking-tight" id="display-date-title">Janeiro, 2026</p>
+                        <h1 class="text-[9px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
+                        <p class="text-sm font-extrabold tracking-tight" id="display-date-title">Janeiro, 2026</p>
                     </div>
                 </div>
                 
                 <!-- Navegador de Período Rápido -->
-                <div class="flex items-center bg-white/10 rounded-xl p-1 gap-1">
-                    <button onclick="changePeriod(-1)" class="p-1.5 hover:bg-white/20 rounded-lg transition-colors tap-feedback">
-                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                <div class="flex items-center bg-white/10 rounded-lg p-0.5 gap-0.5">
+                    <button onclick="changePeriod(-1)" class="p-1 hover:bg-white/20 rounded transition-colors tap-feedback">
+                        <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
                     </button>
-                    <button onclick="changePeriod(1)" class="p-1.5 hover:bg-white/20 rounded-lg transition-colors tap-feedback">
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    <button onclick="changePeriod(1)" class="p-1 hover:bg-white/20 rounded transition-colors tap-feedback">
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- MAIN SCROLL VIEW -->
-        <main class="flex-1 overflow-y-auto px-5 py-5 space-y-5 no-scrollbar">
+        <main class="flex-1 overflow-y-auto px-4 py-4 space-y-4 no-scrollbar">
 
             <!-- ========================================== -->
             <!-- ABA 1: LANÇAMENTOS (CENTRAL DE CAPTURA) -->
             <!-- ========================================== -->
-            <div id="section-lancamentos" class="space-y-5 animate-in fade-in duration-200">
+            <div id="section-lancamentos" class="space-y-4 animate-in fade-in duration-200">
                 
-                <div class="space-y-3">
-                    <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest">Ferramentas Inteligentes</h2>
-                    <div class="grid grid-cols-3 gap-2.5">
-                        <button onclick="startScanner()" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all tap-feedback">
-                            <div class="bg-emerald-600 text-white p-2.5 rounded-xl mb-2 shadow-sm">
-                                <i data-lucide="scan-qr-code" class="w-5 h-5"></i>
+                <div class="space-y-2">
+                    <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ferramentas Inteligentes</h2>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="startScanner()" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all tap-feedback">
+                            <div class="bg-emerald-600 text-white p-2 rounded-lg mb-1.5 shadow-sm">
+                                <i data-lucide="scan-qr-code" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wide">Scanner QR</span>
+                            <span class="text-[8px] font-black text-emerald-800 uppercase tracking-wide">Scanner QR</span>
                         </button>
 
-                        <label class="bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all tap-feedback cursor-pointer">
+                        <label class="bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all tap-feedback cursor-pointer">
                             <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="handleFileUpload(event)" />
-                            <div class="bg-blue-600 text-white p-2.5 rounded-xl mb-2 shadow-sm">
-                                <i data-lucide="image" class="w-5 h-5"></i>
+                            <div class="bg-blue-600 text-white p-2 rounded-lg mb-1.5 shadow-sm">
+                                <i data-lucide="image" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-[9px] font-black text-blue-800 uppercase tracking-wide">Carregar Foto</span>
+                            <span class="text-[8px] font-black text-blue-800 uppercase tracking-wide">Carregar Foto</span>
                         </label>
 
-                        <button onclick="focusLinkInput()" class="bg-purple-50 hover:bg-purple-100 border border-purple-100 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all tap-feedback">
-                            <div class="bg-purple-600 text-white p-2.5 rounded-xl mb-2 shadow-sm">
-                                <i data-lucide="link" class="w-5 h-5"></i>
+                        <button onclick="focusLinkInput()" class="bg-purple-50 hover:bg-purple-100 border border-purple-100 rounded-xl p-2 flex flex-col items-center justify-center text-center transition-all tap-feedback">
+                            <div class="bg-purple-600 text-white p-2 rounded-lg mb-1.5 shadow-sm">
+                                <i data-lucide="link" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-[9px] font-black text-purple-800 uppercase tracking-wide">Colar Link</span>
+                            <span class="text-[8px] font-black text-purple-800 uppercase tracking-wide">Colar Link</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Campo de Entrada de Nota Oculto/Expansível -->
-                <div id="link-input-container" class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-4 animate-in slide-in-from-top-2 duration-200 space-y-3">
+                <div id="link-input-container" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3 animate-in slide-in-from-top-2 duration-200 space-y-2">
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Colar Cupom ou Chave</span>
+                        <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Colar Cupom ou Chave</span>
                         <button onclick="toggleElement('link-input-container', false)" class="text-slate-400 hover:text-slate-600">
-                            <i data-lucide="x" class="w-4 h-4"></i>
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
                         </button>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-1.5">
                         <input 
                             type="text" 
                             id="scan-input"
-                            placeholder="Link NFC-e ou Chave com 44 dígitos..." 
-                            class="flex-1 bg-white border border-slate-200 rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-emerald-500"
+                            placeholder="Link NFC-e ou Chave..." 
+                            class="flex-1 bg-white border border-slate-200 rounded-lg text-[10px] p-2 outline-none focus:ring-1 focus:ring-emerald-500"
                         />
-                        <button onclick="handleLinkProcess()" class="bg-emerald-600 text-white px-4 rounded-xl font-bold text-xs hover:bg-emerald-700 active:scale-95 transition-all">OK</button>
+                        <button onclick="handleLinkProcess()" class="bg-emerald-600 text-white px-3 rounded-lg font-bold text-[10px] hover:bg-emerald-700 active:scale-95 transition-all">OK</button>
                     </div>
                 </div>
 
                 <!-- VALIDAÇÃO DE PENDENTES EXTRAÍDOS -->
-                <div id="pending-section" class="hidden bg-amber-50 border border-amber-200 rounded-2xl overflow-hidden shadow-sm animate-in fade-in duration-300">
-                    <div class="p-4 bg-amber-100/50 flex justify-between items-center border-b border-amber-200">
-                        <h3 class="text-xs font-black text-amber-800 uppercase flex items-center gap-1.5">
-                            <i data-lucide="file-check" class="w-4 h-4 text-amber-600"></i> Validando (<span id="pending-count">0</span>)
+                <div id="pending-section" class="hidden bg-amber-50 border border-amber-200 rounded-xl overflow-hidden shadow-sm animate-in fade-in duration-300">
+                    <div class="p-3 bg-amber-100/50 flex justify-between items-center border-b border-amber-200">
+                        <h3 class="text-[10px] font-black text-amber-800 uppercase flex items-center gap-1">
+                            <i data-lucide="file-check" class="w-3.5 h-3.5 text-amber-600"></i> Validando (<span id="pending-count">0</span>)
                         </h3>
-                        <button onclick="confirmAllPending()" class="bg-amber-600 text-white px-3 py-1.5 rounded-xl text-[9px] font-bold uppercase hover:bg-emerald-700 transition-colors">
-                            Salvar Todos
+                        <button onclick="confirmAllPending()" class="bg-amber-600 text-white px-2.5 py-1 rounded-lg text-[8px] font-bold uppercase hover:bg-emerald-700 transition-colors">
+                            Salvar
                         </button>
                     </div>
-                    <div id="pending-list" class="p-3 space-y-2"></div>
+                    <div id="pending-list" class="p-2 space-y-2"></div>
                 </div>
 
                 <!-- FORMULÁRIO MANUAL COM MÉTODO DE GASTO RECORRENTE -->
-                <form id="manual-form" class="bg-slate-50 rounded-2xl p-5 border border-slate-200/60 space-y-4 shadow-sm" onsubmit="handleManualSubmit(event)">
-                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 border-b border-slate-200/60 pb-2">
-                        <i data-lucide="pen-tool" class="w-4 h-4 text-emerald-600"></i> Lançamento Manual
+                <form id="manual-form" class="bg-slate-50 rounded-xl p-4 border border-slate-200/60 space-y-3 shadow-sm" onsubmit="handleManualSubmit(event)">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-200/60 pb-1.5">
+                        <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-emerald-600"></i> Lançamento Manual
                     </h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase">Usuário</label>
-                            <select id="select-user" name="user" class="w-full bg-white border border-slate-200 rounded-lg text-xs p-2 outline-none focus:ring-1 focus:ring-emerald-500 transition-all"></select>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-0.5">
+                            <label class="text-[8px] font-bold text-slate-400 uppercase">Usuário</label>
+                            <select id="select-user" name="user" class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-1.5 outline-none focus:ring-1 focus:ring-emerald-500 transition-all"></select>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase">Categoria</label>
-                            <select id="select-category" name="category" class="w-full bg-white border border-slate-200 rounded-lg text-xs p-2 outline-none focus:ring-1 focus:ring-emerald-500 transition-all"></select>
+                        <div class="space-y-0.5">
+                            <label class="text-[8px] font-bold text-slate-400 uppercase">Categoria</label>
+                            <select id="select-category" name="category" class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-1.5 outline-none focus:ring-1 focus:ring-emerald-500 transition-all"></select>
                         </div>
-                        <div class="space-y-1 col-span-2">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase">Local/Estabelecimento</label>
-                            <input name="description" required type="text" placeholder="Ex: Feira livre" class="w-full bg-white border border-slate-200 rounded-lg text-xs p-2 outline-none focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        <div class="space-y-0.5 col-span-2">
+                            <label class="text-[8px] font-bold text-slate-400 uppercase">Estabelecimento</label>
+                            <input name="description" required type="text" placeholder="Ex: Feira livre" class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-1.5 outline-none focus:ring-1 focus:ring-emerald-500 transition-all" />
                         </div>
-                        <div class="space-y-1 col-span-2">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase">Valor R$</label>
-                            <input name="amount" required step="0.01" type="number" placeholder="0,00" class="w-full border border-emerald-200 bg-emerald-50/30 rounded-lg text-xs p-2 font-bold outline-none focus:ring-1 focus:ring-emerald-500 transition-all" />
+                        <div class="space-y-0.5 col-span-2">
+                            <label class="text-[8px] font-bold text-slate-400 uppercase">Valor R$</label>
+                            <input name="amount" required step="0.01" type="number" placeholder="0,00" class="w-full border border-emerald-200 bg-emerald-50/30 rounded-lg text-[10px] p-1.5 font-bold outline-none focus:ring-1 focus:ring-emerald-500 transition-all" />
                         </div>
                     </div>
 
                     <!-- RECORRÊNCIA -->
-                    <div class="flex items-center justify-between p-3 bg-white border border-slate-200/60 rounded-xl">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="repeat" class="w-4 h-4 text-emerald-600"></i>
-                            <span class="text-xs font-bold text-slate-700">Tornar gasto recorrente?</span>
+                    <div class="flex items-center justify-between p-2 bg-white border border-slate-200/60 rounded-lg">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            <span class="text-[10px] font-bold text-slate-700">Recorrente?</span>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="check-recurring" class="sr-only peer" onchange="toggleRecurringPeriod(this.checked)">
-                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <div class="w-8 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-600"></div>
                         </label>
                     </div>
 
                     <!-- PERÍODO DE RECORRÊNCIA -->
-                    <div id="recurring-period-panel" class="hidden animate-in slide-in-from-top-2 duration-200 p-4 bg-emerald-50/50 border border-emerald-100 rounded-xl space-y-3">
-                        <p class="text-[9px] font-black text-emerald-800 uppercase tracking-widest flex items-center gap-1.5">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Período e Frequência
+                    <div id="recurring-period-panel" class="hidden animate-in slide-in-from-top-2 duration-200 p-3 bg-emerald-50/50 border border-emerald-100 rounded-lg space-y-2">
+                        <p class="text-[8px] font-black text-emerald-800 uppercase tracking-widest flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i> Período e Frequência
                         </p>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-bold text-slate-400 uppercase">Frequência</label>
-                                <select id="recurring-frequency" class="w-full bg-white border border-slate-200 rounded-lg text-xs p-2 outline-none focus:ring-1 focus:ring-emerald-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="space-y-0.5">
+                                <label class="text-[8px] font-bold text-slate-400 uppercase">Frequência</label>
+                                <select id="recurring-frequency" class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-1 outline-none focus:ring-1 focus:ring-emerald-500">
                                     <option value="mensal">Mensal</option>
                                     <option value="bimestral">Bimestral</option>
                                     <option value="trimestral">Trimestral</option>
@@ -227,30 +225,30 @@
                                     <option value="anual">Anual</option>
                                 </select>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-bold text-slate-400 uppercase">Repetir por:</label>
-                                <div class="flex items-center gap-1.5">
-                                    <input type="number" id="recurring-months" min="2" max="120" value="12" class="w-full bg-white border border-slate-200 rounded-lg text-xs p-2 outline-none focus:ring-1 focus:ring-emerald-500 text-center font-bold" />
-                                    <span class="text-[10px] text-slate-500 font-bold uppercase">vezes</span>
+                            <div class="space-y-0.5">
+                                <label class="text-[8px] font-bold text-slate-400 uppercase">Repetir:</label>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="recurring-months" min="2" max="120" value="12" class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-1 outline-none focus:ring-1 focus:ring-emerald-500 text-center font-bold" />
+                                    <span class="text-[8px] text-slate-500 font-bold uppercase">vezes</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-xs uppercase shadow-md hover:bg-emerald-700 active:scale-95 transition-all">Salvar Lançamento</button>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-lg text-[10px] uppercase shadow-md hover:bg-emerald-700 active:scale-95 transition-all">Salvar Lançamento</button>
                 </form>
             </div>
 
             <!-- ========================================== -->
             <!-- ABA 2: EXTRATO (TRANSAÇÕES DO MÊS) -->
             <!-- ========================================== -->
-            <div id="section-extrato" class="hidden space-y-4 animate-in fade-in duration-200">
+            <div id="section-extrato" class="hidden space-y-3 animate-in fade-in duration-200">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest">Extrato do Período</h2>
-                    <span id="registered-count" class="text-[9px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-bold">0 itens</span>
+                    <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Extrato do Período</h2>
+                    <span id="registered-count" class="text-[8px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">0 itens</span>
                 </div>
                 
-                <div id="transactions-list" class="space-y-3">
+                <div id="transactions-list" class="space-y-2">
                     <!-- Gerado Dinamicamente -->
                 </div>
             </div>
@@ -258,117 +256,117 @@
             <!-- ========================================== -->
             <!-- ABA 3: MENSAL (DASHBOARD POR USUÁRIO E CATEGORIA) -->
             <!-- ========================================== -->
-            <div id="section-dashboard" class="hidden space-y-5 animate-in fade-in duration-200">
-                <div class="bg-gradient-to-br from-emerald-600 to-emerald-850 text-white p-5 rounded-3xl shadow-lg flex items-center justify-between">
+            <div id="section-dashboard" class="hidden space-y-4 animate-in fade-in duration-200">
+                <div class="bg-gradient-to-br from-emerald-600 to-emerald-850 text-white p-4 rounded-2xl shadow-lg flex items-center justify-between">
                     <div>
-                        <h3 class="text-[9px] font-black text-emerald-200 uppercase tracking-widest mb-1">Gasto Consolidado</h3>
-                        <div id="monthly-total-value" class="text-3xl font-black tracking-tight">R$ 0,00</div>
+                        <h3 class="text-[8px] font-black text-emerald-200 uppercase tracking-widest mb-0.5">Consolidado</h3>
+                        <div id="monthly-total-value" class="text-xl font-black tracking-tight">R$ 0,00</div>
                     </div>
-                    <div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md">
-                        <i data-lucide="activity" class="w-6 h-6 text-emerald-300"></i>
+                    <div class="bg-white/10 p-2 rounded-xl backdrop-blur-md">
+                        <i data-lucide="activity" class="w-5 h-5 text-emerald-300"></i>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Membros da Família</h3>
-                    <div id="user-stats-list" class="grid grid-cols-2 gap-3"></div>
+                <div class="space-y-2">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Família</h3>
+                    <div id="user-stats-list" class="grid grid-cols-2 gap-2"></div>
                 </div>
 
-                <div class="bg-slate-50 border border-slate-200/60 rounded-3xl p-5 space-y-4">
-                    <h3 class="font-black text-slate-700 text-xs uppercase tracking-widest flex items-center gap-2">
-                        <i data-lucide="pie-chart" class="text-emerald-500 w-4 h-4"></i> Categorias do Mês
+                <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 space-y-3">
+                    <h3 class="font-black text-slate-700 text-[10px] uppercase tracking-widest flex items-center gap-1.5">
+                        <i data-lucide="pie-chart" class="text-emerald-500 w-3.5 h-3.5"></i> Categorias
                     </h3>
-                    <div id="category-progress-list" class="space-y-4"></div>
+                    <div id="category-progress-list" class="space-y-3"></div>
                 </div>
             </div>
 
             <!-- ========================================== -->
             <!-- ABA 4: ANUAL (VISÃO DE TENDÊNCIAS ANUAIS) -->
             <!-- ========================================== -->
-            <div id="section-anual" class="hidden space-y-5 animate-in fade-in duration-200">
-                <div class="bg-slate-900 text-white p-5 rounded-3xl shadow-xl flex items-center justify-between border border-slate-850">
+            <div id="section-anual" class="hidden space-y-4 animate-in fade-in duration-200">
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-xl flex items-center justify-between border border-slate-850">
                     <div>
-                        <h3 id="annual-total-title" class="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-1">Total do Ano</h3>
-                        <div id="annual-total-value" class="text-2xl font-black tracking-tight">R$ 0,00</div>
+                        <h3 id="annual-total-title" class="text-[8px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-0.5">Total do Ano</h3>
+                        <div id="annual-total-value" class="text-lg font-black tracking-tight">R$ 0,00</div>
                     </div>
-                    <div class="bg-white/10 p-3.5 rounded-xl"><i data-lucide="calendar" class="w-5 h-5 text-emerald-400"></i></div>
+                    <div class="bg-white/10 p-2 rounded-lg"><i data-lucide="calendar" class="w-4 h-4 text-emerald-400"></i></div>
                 </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Membros da Família (Ano)</h3>
-                    <div id="user-annual-stats" class="grid grid-cols-2 gap-3"></div>
+                <div class="space-y-2">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Família (Ano)</h3>
+                    <div id="user-annual-stats" class="grid grid-cols-2 gap-2"></div>
                 </div>
 
-                <div class="bg-slate-50 border border-slate-200/60 rounded-3xl p-5 space-y-6">
-                    <h3 class="font-black text-slate-700 text-xs uppercase tracking-widest flex items-center gap-2">
-                        <i data-lucide="bar-chart-3" class="text-emerald-500 w-4 h-4"></i> Evolução Mensal
+                <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 space-y-4">
+                    <h3 class="font-black text-slate-700 text-[10px] uppercase tracking-widest flex items-center gap-1.5">
+                        <i data-lucide="bar-chart-3" class="text-emerald-500 w-3.5 h-3.5"></i> Evolução Mensal
                     </h3>
-                    <div id="annual-bars-container" class="flex items-end justify-between h-44 gap-2.5 px-1 pt-4"></div>
+                    <div id="annual-bars-container" class="flex items-end justify-between h-32 gap-1 px-0.5 pt-2"></div>
                 </div>
             </div>
 
             <!-- ========================================== -->
             <!-- ABA 5: AJUSTES (PAINEL DE CONTROLE INTEGRADO) -->
             <!-- ========================================== -->
-            <div id="section-ajustes" class="hidden space-y-5 animate-in fade-in duration-200">
+            <div id="section-ajustes" class="hidden space-y-4 animate-in fade-in duration-200">
                 
                 <!-- GERENCIAR USUÁRIOS -->
-                <section class="space-y-4 bg-slate-50 border border-slate-200/60 p-5 rounded-3xl shadow-sm">
-                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2 border-b border-slate-200 pb-2">
-                        <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i> Gerenciar Usuários
+                <section class="space-y-3 bg-slate-50 border border-slate-200/60 p-4 rounded-2xl shadow-sm">
+                    <h4 class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-emerald-600"></i> Usuários
                     </h4>
-                    <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-1.5">
                         <input 
                             type="text" 
                             id="new-user-input"
-                            placeholder="Nome do Usuário..." 
-                            class="w-full bg-white border border-slate-200 rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-emerald-500"
+                            placeholder="Nome..." 
+                            class="w-full bg-white border border-slate-200 rounded-lg text-[10px] p-2 outline-none focus:ring-1 focus:ring-emerald-500"
                         />
-                        <div class="flex gap-2">
+                        <div class="flex gap-1.5">
                             <input 
                                 type="text" 
                                 id="new-user-card"
-                                placeholder="Cartões (ex: 1234, 5678)" 
-                                class="flex-1 bg-white border border-slate-200 rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-emerald-500"
+                                placeholder="Cartões (ex: 1234)" 
+                                class="flex-1 bg-white border border-slate-200 rounded-lg text-[10px] p-2 outline-none focus:ring-1 focus:ring-emerald-500"
                             />
                             <button 
                                 onclick="handleCreateUser()"
-                                class="bg-emerald-600 text-white px-4 rounded-xl font-bold text-xs uppercase shadow-md hover:bg-emerald-750 active:scale-95 transition-all"
+                                class="bg-emerald-600 text-white px-3 rounded-lg font-bold text-[10px] uppercase shadow-md hover:bg-emerald-750 active:scale-95 transition-all"
                             >
-                                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
                     </div>
-                    <div id="users-config-list" class="grid grid-cols-1 gap-3 pt-2"></div>
+                    <div id="users-config-list" class="grid grid-cols-1 gap-2 pt-1.5"></div>
                 </section>
 
                 <!-- GERENCIAR CATEGORIAS -->
-                <section class="space-y-4 bg-slate-50 border border-slate-200/60 p-5 rounded-3xl shadow-sm">
-                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2 border-b border-slate-200 pb-2">
-                        <i data-lucide="tag" class="w-4 h-4 text-emerald-600"></i> Gerenciar Categorias
+                <section class="space-y-3 bg-slate-50 border border-slate-200/60 p-4 rounded-2xl shadow-sm">
+                    <h4 class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-1.5 border-b border-slate-200 pb-1.5">
+                        <i data-lucide="tag" class="w-3.5 h-3.5 text-emerald-600"></i> Categorias
                     </h4>
-                    <div class="flex gap-2">
+                    <div class="flex gap-1.5">
                         <input 
                             type="text" 
                             id="new-category-input"
-                            placeholder="Nova Categoria..." 
-                            class="flex-1 bg-white border border-slate-200 rounded-xl text-xs p-3 outline-none focus:ring-1 focus:ring-emerald-500"
+                            placeholder="Nova..." 
+                            class="flex-1 bg-white border border-slate-200 rounded-lg text-[10px] p-2 outline-none focus:ring-1 focus:ring-emerald-500"
                         />
                         <button 
                             onclick="handleCreateCategory()"
-                            class="bg-emerald-600 text-white px-5 rounded-xl font-bold text-xs uppercase shadow-md hover:bg-emerald-750 active:scale-95 transition-all"
+                            class="bg-emerald-600 text-white px-3 rounded-lg font-bold text-[10px] uppercase shadow-md hover:bg-emerald-750 active:scale-95 transition-all"
                         >
                             ADD
                         </button>
                     </div>
-                    <div id="categories-config-list" class="flex flex-wrap gap-2 p-2 bg-white rounded-2xl border border-slate-100"></div>
+                    <div id="categories-config-list" class="flex flex-wrap gap-1.5 p-1.5 bg-white rounded-xl border border-slate-100"></div>
                 </section>
 
                 <!-- CONFIGURAÇÕES ADICIONAIS -->
-                <section class="bg-red-50 border border-red-200 p-5 rounded-3xl space-y-3 shadow-sm">
-                    <h4 class="text-[10px] font-black text-red-800 uppercase tracking-[0.2em]">Danger Zone</h4>
-                    <p class="text-[10px] text-red-600">Zerar todos os dados do aplicativo e restaurar as configurações padrão de fábrica.</p>
-                    <button onclick="resetDataAndReload()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-xl text-xs uppercase transition-all tap-feedback">
+                <section class="bg-red-50 border border-red-200 p-4 rounded-2xl space-y-2 shadow-sm">
+                    <h4 class="text-[9px] font-black text-red-800 uppercase tracking-[0.2em]">Danger Zone</h4>
+                    <p class="text-[8px] text-red-600">Zerar todos os dados do aplicativo e restaurar configurações padrões.</p>
+                    <button onclick="resetDataAndReload()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded-lg text-[9px] uppercase transition-all tap-feedback">
                         Reiniciar App
                     </button>
                 </section>
@@ -376,28 +374,28 @@
 
         </main>
 
-        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES (NATIVE BOTTOM BAR) -->
-        <nav class="fixed-bottom-nav bg-white/95 border-t border-slate-100 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-md max-w-[420px] mx-auto shadow-lg">
-            <div class="grid grid-cols-5 h-20 items-center justify-center text-center">
-                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tab-active tap-feedback">
-                    <i data-lucide="plus-circle" class="w-5.5 h-5.5"></i>
-                    <span class="text-[8px] uppercase tracking-wider">Lançar</span>
+        <!-- BOTÕES DE NAVEGAÇÃO DE ABAS INFERIORES (NATIVE BOTTOM BAR COESIVA 320PX) -->
+        <nav class="fixed-bottom-nav bg-white/95 border-t border-slate-100 fixed bottom-0 left-0 right-0 z-40 backdrop-blur-md max-w-[320px] mx-auto shadow-lg">
+            <div class="grid grid-cols-5 h-16 items-center justify-center text-center">
+                <button onclick="switchTab('lancamentos')" id="btn-tab-lancamentos" class="flex flex-col items-center justify-center gap-0.5 text-emerald-600 font-extrabold tab-active tap-feedback">
+                    <i data-lucide="plus-circle" class="w-4.5 h-4.5"></i>
+                    <span class="text-[7px] uppercase tracking-wider">Lançar</span>
                 </button>
-                <button onclick="switchTab('extrato')" id="btn-tab-extrato" class="flex flex-col items-center justify-center gap-1 text-slate-400 tap-feedback">
-                    <i data-lucide="file-text" class="w-5.5 h-5.5"></i>
-                    <span class="text-[8px] uppercase tracking-wider">Extrato</span>
+                <button onclick="switchTab('extrato')" id="btn-tab-extrato" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 tap-feedback">
+                    <i data-lucide="file-text" class="w-4.5 h-4.5"></i>
+                    <span class="text-[7px] uppercase tracking-wider">Extrato</span>
                 </button>
-                <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="flex flex-col items-center justify-center gap-1 text-slate-400 tap-feedback">
-                    <i data-lucide="pie-chart" class="w-5.5 h-5.5"></i>
-                    <span class="text-[8px] uppercase tracking-wider">Mensal</span>
+                <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 tap-feedback">
+                    <i data-lucide="pie-chart" class="w-4.5 h-4.5"></i>
+                    <span class="text-[7px] uppercase tracking-wider">Mensal</span>
                 </button>
-                <button onclick="switchTab('anual')" id="btn-tab-anual" class="flex flex-col items-center justify-center gap-1 text-slate-400 tap-feedback">
-                    <i data-lucide="bar-chart-3" class="w-5.5 h-5.5"></i>
-                    <span class="text-[8px] uppercase tracking-wider">Anual</span>
+                <button onclick="switchTab('anual')" id="btn-tab-anual" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 tap-feedback">
+                    <i data-lucide="bar-chart-3" class="w-4.5 h-4.5"></i>
+                    <span class="text-[7px] uppercase tracking-wider">Anual</span>
                 </button>
-                <button onclick="switchTab('ajustes')" id="btn-tab-ajustes" class="flex flex-col items-center justify-center gap-1 text-slate-400 tap-feedback">
-                    <i data-lucide="settings" class="w-5.5 h-5.5"></i>
-                    <span class="text-[8px] uppercase tracking-wider">Ajustes</span>
+                <button onclick="switchTab('ajustes')" id="btn-tab-ajustes" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 tap-feedback">
+                    <i data-lucide="settings" class="w-4.5 h-4.5"></i>
+                    <span class="text-[7px] uppercase tracking-wider">Ajustes</span>
                 </button>
             </div>
         </nav>
@@ -406,52 +404,52 @@
 
     <!-- MODAL DE OPÇÕES DE COMPROVANTE (VER OU BAIXAR) -->
     <div id="receipt-options-modal" class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-end sm:justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-[360px] p-5 space-y-4 animate-in slide-in-from-bottom duration-200">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                    <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i> Comprovante
+        <div class="bg-white rounded-2xl w-full max-w-[280px] p-4 space-y-3 animate-in slide-in-from-bottom duration-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                    <i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i> Comprovante
                 </h3>
                 <button onclick="closeReceiptOptions()" class="text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
                 </button>
             </div>
-            <p class="text-xs text-slate-600 font-medium">O que você deseja fazer com este comprovante?</p>
-            <div class="grid grid-cols-2 gap-3">
-                <button id="btn-view-receipt" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-xl text-xs uppercase transition-all tap-feedback flex items-center justify-center gap-1.5">
-                    <i data-lucide="eye" class="w-4 h-4"></i> Ver
+            <p class="text-[10px] text-slate-600 font-medium">O que você deseja fazer com este comprovante?</p>
+            <div class="grid grid-cols-2 gap-2">
+                <button id="btn-view-receipt" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2 px-3 rounded-lg text-[10px] uppercase transition-all tap-feedback flex items-center justify-center gap-1">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Ver
                 </button>
-                <button id="btn-download-receipt" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase transition-all tap-feedback flex items-center justify-center gap-1.5">
-                    <i data-lucide="download" class="w-4 h-4"></i> Baixar
+                <button id="btn-download-receipt" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-lg text-[10px] uppercase transition-all tap-feedback flex items-center justify-center gap-1">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Baixar
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- OVERLAY DO SCANNER AO VIVO -->
-    <div id="scanner-modal" class="fixed-scanner-modal fixed inset-0 z-50 bg-black hidden flex-col items-center justify-center max-w-[420px] mx-auto">
+    <!-- OVERLAY DO SCANNER AO VIVO LIMITADO A 320PX -->
+    <div id="scanner-modal" class="fixed-scanner-modal fixed inset-0 z-50 bg-black hidden flex-col items-center justify-center max-w-[320px] mx-auto">
         <div class="relative w-full aspect-[3/4] bg-slate-950 overflow-hidden">
             <video id="scanner-video" autoplay playsinline class="w-full h-full object-cover"></video>
-            <div class="absolute inset-0 border-2 border-emerald-500/30 m-12 pointer-events-none">
+            <div class="absolute inset-0 border-2 border-emerald-500/30 m-8 pointer-events-none">
                 <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500/50 animate-scan-line shadow-[0_0_15px_rgba(16,185,129,0.7)]"></div>
             </div>
-            <div class="absolute bottom-10 left-0 right-0 flex justify-around items-center px-10">
-                <button onclick="stopScanner()" class="p-4 bg-white/10 rounded-full text-white backdrop-blur-md hover:bg-white/20 transition-colors">
-                    <i data-lucide="x" class="w-6 h-6"></i>
+            <div class="absolute bottom-6 left-0 right-0 flex justify-around items-center px-6">
+                <button onclick="stopScanner()" class="p-3 bg-white/10 rounded-full text-white backdrop-blur-md hover:bg-white/20 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
-                <button onclick="capturePhoto()" class="w-20 h-20 bg-white rounded-full border-4 border-emerald-500 flex items-center justify-center shadow-2xl active:scale-90 transition-all">
-                    <div class="w-16 h-16 rounded-full border-2 border-slate-200 bg-white"></div>
+                <button onclick="capturePhoto()" class="w-16 h-16 bg-white rounded-full border-4 border-emerald-500 flex items-center justify-center shadow-2xl active:scale-90 transition-all">
+                    <div class="w-12 h-12 rounded-full border-2 border-slate-200 bg-white"></div>
                 </button>
-                <div class="w-14"></div>
+                <div class="w-10"></div>
             </div>
         </div>
         <canvas id="scanner-canvas" class="hidden"></canvas>
-        <p class="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mt-8 animate-pulse">Aponte para o Cupom ou QR Code</p>
+        <p class="text-white/60 text-[8px] font-black uppercase tracking-[0.2em] mt-4 animate-pulse">Aponte para o Cupom ou QR Code</p>
     </div>
 
     <!-- FEEDBACK TOAST (INTEGRADO À BASE DO DISPOSITIVO) -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] hidden bg-slate-900 text-white text-[10px] font-black px-6 py-3 rounded-full items-center gap-3 uppercase border border-white/10 shadow-2xl animate-in slide-in-from-bottom-5 max-w-[320px] w-auto">
-        <div id="toast-loader" class="hidden"><i data-lucide="loader-2" class="animate-spin text-emerald-400 w-4 h-4"></i></div>
-        <div id="toast-success" class="hidden"><i data-lucide="check-circle" class="text-emerald-400 w-4 h-4"></i></div>
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] hidden bg-slate-900 text-white text-[9px] font-black px-4 py-2 rounded-full items-center gap-2 uppercase border border-white/10 shadow-2xl animate-in slide-in-from-bottom-5 max-w-[260px] w-auto">
+        <div id="toast-loader" class="hidden"><i data-lucide="loader-2" class="animate-spin text-emerald-400 w-3.5 h-3.5"></i></div>
+        <div id="toast-success" class="hidden"><i data-lucide="check-circle" class="text-emerald-400 w-3.5 h-3.5"></i></div>
         <span id="toast-message">Feedback</span>
     </div>
 
@@ -564,9 +562,9 @@
             ['lancamentos', 'extrato', 'dashboard', 'anual', 'ajustes'].forEach(t => {
                 const btn = document.getElementById(`btn-tab-${t}`);
                 if (t === tab) {
-                    btn.className = "flex flex-col items-center justify-center gap-1 text-emerald-600 font-extrabold tab-active tap-feedback";
+                    btn.className = "flex flex-col items-center justify-center gap-0.5 text-emerald-600 font-extrabold tab-active tap-feedback";
                 } else {
-                    btn.className = "flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-slate-600 tap-feedback";
+                    btn.className = "flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-slate-600 tap-feedback";
                 }
             });
 
@@ -622,32 +620,29 @@
             lucide.createIcons();
         }
 
-        // --- MOTOR DE EXTRAÇÃO EXCLUSIVO VIA REGEX CALIBRADO ---
+        // --- MOTOR DE EXTRAÇÃO RESTRITO E EXCLUSIVO (CONFORME SOLICITADO) ---
         function regexMappingParser(rawText) {
             if (!rawText) return null;
-            const textLower = rawText.toLowerCase();
             const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
             let estabelecimento = "Estabelecimento Desconhecido";
             let valor = 0.00;
             let usuario = users[0]?.name || "Usuário";
-            let categoria = categories[0] || "Mercado"; // Apenas o padrão das categorias
+            let categoria = "Mercado"; 
             let dataCompra = new Date().toISOString().split('T')[0];
             let cartaoDetectado = "";
 
-            // 1. RECONHECER APENAS: 4 últimos dígitos do cartão (se houver)
-            const cardRegexes = [
-                /\*{12,}(\d{4})\b/,
-                /(?:cartao|card|debito|credito|visa|master|elo|hiper)[^\n]{0,30}\b(\d{4})\b/i,
-                /\b\d{4}\s\d{4}\s\d{4}\s(\d{4})\b/,
-                /\b\d{4}\.\d{4}\.\d{4}\.(\d{4})\b/
-            ];
-            
-            for (const regex of cardRegexes) {
-                const match = rawText.match(regex);
-                if (match && match[1]) {
-                    cartaoDetectado = match[1];
-                    break;
+            // 1. RECONHECER APENAS: 4 últimos dígitos do cartão pós 14 asteriscos (se houver)
+            const asteriskCardRegex = /\*{14}(\d{4})\b/;
+            const asteriskMatches = rawText.match(asteriskCardRegex);
+
+            if (asteriskMatches && asteriskMatches[1]) {
+                cartaoDetectado = asteriskMatches[1];
+            } else {
+                const fallbackCardRegex = /(?:\*{10,}|X{10,})\s*(\d{4})\b/i;
+                const fallbackMatches = rawText.match(fallbackCardRegex);
+                if (fallbackMatches && fallbackMatches[1]) {
+                    cartaoDetectado = fallbackMatches[1];
                 }
             }
 
@@ -660,93 +655,112 @@
                 }
             }
 
-            // 2. RECONHECER APENAS: Data
-            const dateRegexes = [
-                /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{4})\b/,
-                /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{2})\b/
-            ];
-            for (const regex of dateRegexes) {
-                const match = rawText.match(regex);
-                if (match) {
-                    let d = parseInt(match[1]);
-                    let m = parseInt(match[2]);
-                    let y = match[3];
+            // 2. RECONHECER APENAS: Data (dia, mês e ano)
+            const ptMonthDateRegex = /\b(\d{1,2})[\/\.-](jan|fev|mar|abr|mai|may|jun|jul|ago|set|out|nov|dez)[^\d\s]*[\/\.-](\d{2,4})\b/i;
+            const ptMonthMatch = rawText.match(ptMonthDateRegex);
+
+            if (ptMonthMatch) {
+                let d = parseInt(ptMonthMatch[1]);
+                let mStr = ptMonthMatch[2].toLowerCase();
+                let y = ptMonthMatch[3];
+                let m = monthsMap[mStr];
+
+                if (d >= 1 && d <= 31 && m) {
+                    if (y.length === 2) y = "20" + y;
+                    const yearInt = parseInt(y);
+                    if (yearInt >= 2000 && yearInt <= 2040) {
+                        dataCompra = `${y}-${m}-${String(d).padStart(2, '0')}`;
+                    }
+                }
+            } else {
+                const dateRegex = /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{2,4})\b/;
+                const dateMatch = rawText.match(dateRegex);
+                if (dateMatch) {
+                    let d = parseInt(dateMatch[1]);
+                    let m = parseInt(dateMatch[2]);
+                    let y = dateMatch[3];
+
                     if (d >= 1 && d <= 31 && m >= 1 && m <= 12) {
                         if (y.length === 2) y = "20" + y;
                         const yearInt = parseInt(y);
                         if (yearInt >= 2000 && yearInt <= 2040) {
                             dataCompra = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            break;
                         }
                     }
                 }
             }
 
-            // 3. RECONHECER APENAS: Valor total (prioridade máxima para o valor total em destaque)
-            let foundValues = [];
-            const allPrices = rawText.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/g);
-            if (allPrices) {
-                allPrices.forEach(str => {
-                    const val = parseNumber(str);
-                    if (val > 0 && val < 5000) {
-                        foundValues.push(val);
-                    }
-                });
-            }
-
-            let totalCandidate = 0;
-            for (const line of lines) {
-                if (/(?:total|pago|pague|liquido|vlr|val|sum)/i.test(line)) {
-                    const lineMatch = line.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/);
-                    if (lineMatch) {
-                        const val = parseNumber(lineMatch[1]);
-                        if (val > totalCandidate && val < 5000) {
-                            totalCandidate = val;
-                        }
-                    }
-                }
-            }
-
-            if (totalCandidate > 0) {
-                valor = totalCandidate;
-            } else if (foundValues.length > 0) {
-                valor = Math.max(...foundValues);
-            }
-
-            // 4. RECONHECER APENAS: Nome do estabelecimento
-            const cpfCnpjRegex = /\b(?:\d{3}\.?\d{3}\.?\d{3}-?\d{2}|\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2})\b/;
-            let foundEstablishment = false;
+            // 3. RECONHECER APENAS: Nome do estabelecimento (sempre junto com CPF ou CNPJ)
+            const cpfRegex = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
+            const cnpjRegex = /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/;
             
-            for (let i = 0; i < Math.min(lines.length, 10); i++) {
-                const line = lines[i];
-                if (cpfCnpjRegex.test(line) || line.toLowerCase().includes("cnpj") || line.toLowerCase().includes("cpf")) {
-                    if (i > 0 && lines[i-1].length > 3 && !/cnpj|cpf|data|hora|fone|tel/i.test(lines[i-1])) {
-                        estabelecimento = lines[i-1];
-                        foundEstablishment = true;
-                        break;
-                    } else if (i < lines.length - 1 && lines[i+1].length > 3 && !/cnpj|cpf|data|hora|fone|tel/i.test(lines[i+1])) {
-                        estabelecimento = lines[i+1];
-                        foundEstablishment = true;
-                        break;
+            let cpfCnpjIndex = -1;
+            for (let i = 0; i < lines.length; i++) {
+                if (cpfRegex.test(lines[i]) || cnpjRegex.test(lines[i]) || lines[i].toLowerCase().includes("cpf") || lines[i].toLowerCase().includes("cnpj")) {
+                    cpfCnpjIndex = i;
+                    break;
+                }
+            }
+
+            if (cpfCnpjIndex !== -1) {
+                if (cpfCnpjIndex > 0) {
+                    let candidate = lines[cpfCnpjIndex - 1].trim();
+                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+                    if (candidate.length > 2) {
+                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                    }
+                } else if (cpfCnpjIndex < lines.length - 1) {
+                    let candidate = lines[cpfCnpjIndex + 1].trim();
+                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+                    if (candidate.length > 2) {
+                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
                     }
                 }
             }
 
-            if (!foundEstablishment) {
+            // 4. RECONHECER APENAS: Valor total (Sempre pós um R$ em destaque)
+            const rsRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/i;
+            const rsMatch = rawText.match(rsRegex);
+
+            if (rsMatch && rsMatch[1]) {
+                valor = parseNumber(rsMatch[1]);
+            } else {
+                // Fallback de valor total caso o "R$" falhe na leitura OCR
+                const priceRegex = /(?:r\$|rs\$|\$)?\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
+                const totalKeywords = /(total|pago|pagar|subtotal|import|valor|liquido|debito|credito|vlr tot|vlr)/i;
+                let potentialValues = [];
+
                 for (const line of lines) {
-                    if (line.length > 4 && !/cupom|fiscal|extrato|comprovante|venda|danfe|sefaz|original|via/i.test(line)) {
-                        estabelecimento = line;
-                        break;
+                    if (totalKeywords.test(line)) {
+                        if (line.replace(/[^\d]/g, '').length > 20) continue; 
+                        
+                        const matchedPrices = line.match(priceRegex);
+                        if (matchedPrices) {
+                            matchedPrices.forEach(str => {
+                                const val = parseNumber(str);
+                                if (val > 0 && val < 9999) potentialValues.unshift(val);
+                            });
+                        }
                     }
                 }
-            }
 
-            estabelecimento = estabelecimento.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
-            if (estabelecimento.length > 40) estabelecimento = estabelecimento.substring(0, 40) + "...";
-            estabelecimento = estabelecimento.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                if (potentialValues.length === 0) {
+                    const allPrices = rawText.match(priceRegex);
+                    if (allPrices) {
+                        allPrices.forEach(str => {
+                            const val = parseNumber(str);
+                            if (val > 0 && val < 5000) potentialValues.push(val);
+                        });
+                    }
+                }
+
+                if (potentialValues.length > 0) {
+                    valor = Math.max(...potentialValues);
+                }
+            }
 
             return {
-                estabelecimento: estabelecimento || "Estabelecimento Desconhecido",
+                estabelecimento: estabelecimento,
                 valor: parseFloat(valor.toFixed(2)),
                 usuario: usuario,
                 categoria: categoria,
@@ -764,7 +778,6 @@
             }
             return parseFloat(cleaned) || 0;
         }
-
 
         // --- TENTATIVA DE ACESSO AO LINK DO QR CODE (WEB SCRAPING SEFAZ VIA ALLORIGINS) ---
         async function fetchAndParseNFCe(url) {
@@ -787,16 +800,15 @@
                 let extractedEstablishment = "";
                 let extractedAmount = null;
                 let extractedDate = "";
-                let extractedCard = "";
 
-                // RECONHECER APENAS: Nome do Estabelecimento (razão social / nome fantasia)
+                // 1. Nome do Estabelecimento (razão social / nome fantasia)
                 const emitenteEl = doc.querySelector('.txtTopo, #txtTopo, .xNome, #Emitente, .principal, .txtRazaoSocial, .text-center h3, #lbl_nome_emitente, #headingEmitente');
                 if (emitenteEl) {
                     extractedEstablishment = emitenteEl.innerText.replace(/[\n\r]/g, ' ').replace(/\s+/g, ' ').trim();
                 }
 
-                // RECONHECER APENAS: Valor Total Real da Nota
-                const directSelectors = ['.txtMax', '#vOficial', '#vLiq', '#lbl_val_liq', '#lbl_val_tot', '.totalNota', '.txtVal'];
+                // 2. Valor Total Real da Nota (Fiel ao site da Sefaz SP e outros estados)
+                const directSelectors = ['.txtMax', '#vOficial', '#vLiq', '#lbl_val_liq', '#lbl_val_tot'];
                 for (const selector of directSelectors) {
                     const el = doc.querySelector(selector);
                     if (el) {
@@ -823,7 +835,7 @@
                     }
                 }
 
-                // RECONHECER APENAS: Data de Emissão do cupom
+                // 3. Data de Emissão do cupom
                 const dateEl = doc.querySelector('.txtData, .data, #dataEmissao, td, #lbl_data_emissao, #lbl_emissao');
                 if (dateEl) {
                     const txt = dateEl.innerText;
@@ -841,19 +853,10 @@
                     }
                 }
 
-                // RECONHECER APENAS: 4 últimos dígitos do cartão (se houver no HTML da Sefaz)
-                const htmlText = doc.body ? doc.body.innerText : "";
-                const cardRegex = /(?:cartao|card|debito|credito|visa|master|elo|hiper)[^\n]{0,30}\b(\d{4})\b/i;
-                const cardMatch = htmlText.match(cardRegex);
-                if (cardMatch) {
-                    extractedCard = cardMatch[1];
-                }
-
                 return {
                     estabelecimento: extractedEstablishment || null,
                     valor: extractedAmount,
-                    data: extractedDate || null,
-                    cartao: extractedCard || null
+                    data: extractedDate || null
                 };
             } catch (err) {
                 console.warn("Falha ao acessar Sefaz pelo proxy CORS. Utilizando fallback local da URL.", err);
@@ -869,7 +872,6 @@
             let invoiceNumber = "";
             let cnpj = "";
             let estabelecimento = "NFC-e Sefaz";
-            let cartaoDetectado = "";
 
             const keyRegex = /\b\d{44}\b/;
             let keyMatch = url.match(keyRegex);
@@ -977,14 +979,13 @@
                 value = 158.45;
             }
 
-            // Segundo: Tentativa ativa de acessar e decodificar a URL via Sefaz usando AllOrigins
+            // Tentativa ativa de acessar e decodificar a URL via Sefaz usando AllOrigins
             showToast("Identificando nota fiscal na fazenda...", true);
             const onlineData = await fetchAndParseNFCe(url);
             if (onlineData) {
                 if (onlineData.estabelecimento) estabelecimento = onlineData.estabelecimento;
                 if (onlineData.valor && onlineData.valor > 0) value = onlineData.valor;
                 if (onlineData.data) dateStr = onlineData.data;
-                if (onlineData.cartao) cartaoDetectado = onlineData.cartao;
                 showToast("Dados da nota carregados automaticamente!");
             } else {
                 showToast("Preenchido via parâmetros locais do QR Code.");
@@ -994,9 +995,9 @@
                 estabelecimento: estabelecimento,
                 valor: parseFloat(value.toFixed(2)),
                 usuario: users[0]?.name || "Usuário",
-                categoria: categories[0] || "Mercado",
+                categoria: "Mercado",
                 data: dateStr,
-                cartao: cartaoDetectado,
+                cartao: "",
                 receiptUrl: url
             };
 
@@ -1070,12 +1071,12 @@
             count.innerText = pendingExpenses.length;
 
             list.innerHTML = pendingExpenses.map(p => `
-                <div class="bg-white p-3 border border-amber-200 rounded-2xl space-y-2.5 shadow-sm">
+                <div class="bg-white p-3 border border-amber-200 rounded-2xl space-y-2 shadow-sm">
                     <div class="grid grid-cols-2 gap-2">
                         <div class="space-y-0.5">
                             <span class="text-[8px] text-slate-400 font-extrabold uppercase tracking-wide">Membro</span>
                             <select 
-                                class="w-full text-xs font-bold bg-slate-50 border border-slate-155 p-1.5 rounded-lg outline-none"
+                                class="w-full text-[10px] font-bold bg-slate-50 border border-slate-155 p-1 rounded-lg outline-none"
                                 onchange="updatePendingField('${p.id}', 'user', this.value)"
                             >
                                 ${users.map(u => `<option value="${u.name}" ${p.user === u.name ? 'selected' : ''}>${u.name}</option>`).join('')}
@@ -1084,7 +1085,7 @@
                         <div class="space-y-0.5">
                             <span class="text-[8px] text-slate-400 font-extrabold uppercase tracking-wide">Categoria</span>
                             <select 
-                                class="w-full text-xs font-bold bg-slate-50 border border-slate-155 p-1.5 rounded-lg outline-none"
+                                class="w-full text-[10px] font-bold bg-slate-50 border border-slate-155 p-1 rounded-lg outline-none"
                                 onchange="updatePendingField('${p.id}', 'category', this.value)"
                             >
                                 ${categories.map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c}</option>`).join('')}
@@ -1096,7 +1097,7 @@
                         <span class="text-[8px] text-slate-400 font-extrabold uppercase tracking-wide">Local/Loja</span>
                         <input 
                             type="text" 
-                            class="w-full text-xs font-bold bg-slate-50 border border-slate-155 p-1.5 rounded-lg outline-none" 
+                            class="w-full text-[10px] font-bold bg-slate-50 border border-slate-155 p-1 rounded-lg outline-none" 
                             value="${p.description}" 
                             onchange="updatePendingField('${p.id}', 'description', this.value)"
                         />
@@ -1108,18 +1109,18 @@
                             <input 
                                 type="number" 
                                 step="0.01" 
-                                class="w-full text-xs font-black text-amber-800 bg-amber-50 border border-amber-100 p-1.5 rounded-lg outline-none" 
+                                class="w-full text-[10px] font-black text-amber-800 bg-amber-50 border border-amber-100 p-1 rounded-lg outline-none" 
                                 value="${p.amount}" 
                                 onchange="updatePendingField('${p.id}', 'amount', this.value)"
                             />
                         </div>
                         <div class="flex flex-col gap-1 text-center justify-center">
-                            <span class="text-[8px] text-slate-500 font-bold">
+                            <span class="text-[7px] text-slate-500 font-bold">
                                 ${p.cartao ? `💳 Final: ${p.cartao}` : 'Sem cartão'}
                             </span>
                             <div class="flex gap-2 justify-center">
-                                <button onclick="approvePending('${p.id}')" class="bg-emerald-600 text-white p-2 rounded-xl text-xs hover:bg-emerald-700 active:scale-95 transition-all flex items-center justify-center flex-1"><i data-lucide="check" class="w-4 h-4"></i></button>
-                                <button onclick="discardPending('${p.id}')" class="bg-red-50 text-red-500 p-2 rounded-xl text-xs hover:bg-red-100 active:scale-95 transition-all flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                <button onclick="approvePending('${p.id}')" class="bg-emerald-600 text-white p-1 rounded-xl text-xs hover:bg-emerald-700 active:scale-95 transition-all flex items-center justify-center flex-1"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="discardPending('${p.id}')" class="bg-red-50 text-red-500 p-1 rounded-xl text-xs hover:bg-red-100 active:scale-95 transition-all flex items-center justify-center"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
                     </div>
@@ -1128,7 +1129,6 @@
             lucide.createIcons();
         }
 
-        // Editar pendências
         function updatePendingField(id, field, value) {
             const item = pendingExpenses.find(p => p.id == id);
             if (item) {
@@ -1169,7 +1169,7 @@
             showToast("Confirmados com sucesso!");
         }
 
-        // --- SUBMISSÃO MANUAL COM MÉTODO DE RECORRÊNCIA INTEGRADO ---
+        // --- SUBMISSÃO MANUAL ---
         function handleManualSubmit(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -1312,11 +1312,11 @@
 
             if (currentPeriodExpenses.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-16 text-slate-400 space-y-3">
-                        <div class="bg-slate-100 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto">
-                            <i data-lucide="archive" class="w-6 h-6 text-slate-400"></i>
+                    <div class="text-center py-12 text-slate-400 space-y-2">
+                        <div class="bg-slate-100 p-3 rounded-full w-10 h-10 flex items-center justify-center mx-auto">
+                            <i data-lucide="archive" class="w-5 h-5 text-slate-400"></i>
                         </div>
-                        <p class="text-xs font-semibold">Nenhum gasto registrado neste mês.</p>
+                        <p class="text-[10px] font-semibold">Nenhum gasto registrado neste mês.</p>
                     </div>
                 `;
                 return;
@@ -1327,27 +1327,26 @@
                 const initials = exp.user.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
                 
                 return `
-                    <div class="bg-slate-50 p-4 border border-slate-100 rounded-2xl flex justify-between items-center hover:bg-slate-100/50 transition-colors shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-emerald-100 text-emerald-800 text-[10px] font-black h-9 w-9 rounded-2xl flex items-center justify-center shadow-inner tracking-wider">
+                    <div class="bg-slate-50 p-3 border border-slate-100 rounded-xl flex justify-between items-center hover:bg-slate-100/50 transition-colors shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-emerald-100 text-emerald-800 text-[8px] font-black h-8 w-8 rounded-xl flex items-center justify-center shadow-inner tracking-wider">
                                 ${initials}
                             </div>
-                            <div>
-                                <h4 class="text-xs font-black text-slate-800 max-w-[180px] truncate">${exp.description}</h4>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="text-[8px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">${exp.category}</span>
-                                    <span class="text-[8px] text-slate-400 font-bold">${formattedDate}</span>
+                            <div class="max-w-[120px] truncate">
+                                <h4 class="text-[10px] font-black text-slate-800 truncate">${exp.description}</h4>
+                                <div class="flex items-center gap-1 mt-0.5">
+                                    <span class="text-[7px] bg-slate-200 text-slate-600 px-1 py-0.5 rounded font-bold uppercase truncate max-w-[60px]">${exp.category}</span>
+                                    <span class="text-[7px] text-slate-400 font-bold">${formattedDate}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-extrabold text-slate-900 whitespace-nowrap">R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-                            <!-- Botão modificado para abrir o seletor Ver/Baixar -->
+                        <div class="flex items-center gap-1">
+                            <span class="text-[10px] font-extrabold text-slate-900 whitespace-nowrap">R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                             <button onclick="openReceiptOptions('${exp.id}')" class="text-slate-400 hover:text-emerald-600 p-1 transition-colors tap-feedback" title="Opções de recibo">
-                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
                             </button>
                             <button onclick="deleteExpense('${exp.id}')" class="text-slate-300 hover:text-red-500 p-1 transition-colors">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
                     </div>
@@ -1362,7 +1361,7 @@
             showToast("Item removido");
         }
 
-        // Tesseract local OCR integrado para uploads de imagens com prioridade absoluta para detecção de QR Code sensível
+        // Tesseract local OCR integrado para uploads de imagens
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1397,7 +1396,6 @@
                     canvas.width = width;
                     canvas.height = height;
                     
-                    // 1ª tentativa: leitura padrão da imagem limpa
                     ctx.drawImage(img, 0, 0, width, height);
                     let imageData = ctx.getImageData(0, 0, width, height);
                     let code = null;
@@ -1406,10 +1404,9 @@
                         try {
                             code = jsQR(imageData.data, width, height, { inversionAttempts: "attemptBoth" });
                         } catch (qrErr) {
-                            console.warn("jsQR falhou na primeira tentativa de binarização:", qrErr);
+                            console.warn("jsQR falhou na primeira tentativa:", qrErr);
                         }
 
-                        // 2ª tentativa (Sensibilidade Elevada): Se falhar, melhora contraste e desabilita suavização
                         if (!code) {
                             ctx.clearRect(0, 0, width, height);
                             ctx.imageSmoothingEnabled = false;
@@ -1419,7 +1416,7 @@
                             try {
                                 code = jsQR(imageData.data, width, height, { inversionAttempts: "attemptBoth" });
                             } catch (qrErr) {
-                                console.warn("jsQR falhou na segunda tentativa de binarização de contraste:", qrErr);
+                                console.warn("jsQR falhou na segunda tentativa:", qrErr);
                             }
                         }
 
@@ -1431,15 +1428,14 @@
                         }
                     }
 
-                    // Fallback para processamento OCR de texto caso não encontre nenhum QR Code
-                    showToast("Processando imagem...", true);
+                    showToast("OCR: Processando imagem...", true);
                     try {
                         const text = await performLocalOCR(file);
                         const parsedData = regexMappingParser(text);
                         if (parsedData && (parsedData.valor > 0 || parsedData.estabelecimento !== "Estabelecimento Desconhecido")) {
                             addPendingItem(parsedData);
                         } else {
-                            showToast("Não foi possível detectar dados estruturados na imagem.");
+                            showToast("Não foi possível detectar dados estruturados.");
                         }
                     } catch (err) {
                         console.error(err);
@@ -1546,7 +1542,7 @@
                             return;
                         }
                     } catch (qrErr) {
-                        console.warn("jsQR encontrou um erro silencioso durante a varredura ao vivo:", qrErr);
+                        console.warn("jsQR encontrou um erro silencioso durante a varredura:", qrErr);
                     }
                 }
             }
@@ -1574,7 +1570,7 @@
                     try {
                         code = jsQR(imageData.data, canvas.width, canvas.height, { inversionAttempts: "attemptBoth" });
                     } catch (qrErr) {
-                        console.warn("jsQR falhou ao ler foto capturada (Tentativa 1):", qrErr);
+                        console.warn("jsQR falhou ao ler foto (Tentativa 1):", qrErr);
                     }
 
                     if (!code) {
@@ -1586,7 +1582,7 @@
                         try {
                             code = jsQR(imageData.data, canvas.width, canvas.height, { inversionAttempts: "attemptBoth" });
                         } catch (qrErr) {
-                            console.warn("jsQR falhou ao ler foto capturada (Tentativa 2):", qrErr);
+                            console.warn("jsQR falhou ao ler foto (Tentativa 2):", qrErr);
                         }
                     }
 
@@ -1598,7 +1594,6 @@
                     }
                 }
 
-                // Se não detectar QR Code, avança para o OCR
                 const text = await performLocalOCR(dataUrl);
                 const parsedData = regexMappingParser(text);
                 addPendingItem(parsedData);
@@ -1623,7 +1618,6 @@
             const totalSum = currentPeriodExpenses.reduce((acc, curr) => acc + curr.amount, 0);
             totalDisplay.innerText = `R$ ${totalSum.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-            // Consolidação por Usuário
             const userTotals = {};
             users.forEach(u => userTotals[u.name] = 0);
             currentPeriodExpenses.forEach(exp => {
@@ -1633,13 +1627,12 @@
             });
 
             userListContainer.innerHTML = Object.entries(userTotals).map(([name, sum]) => `
-                <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">${name}</span>
-                    <span class="text-xs font-black text-slate-800 mt-1">R$ ${sum.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider">${name}</span>
+                    <span class="text-[10px] font-black text-slate-800 mt-0.5">R$ ${sum.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                 </div>
             `).join('');
 
-            // Consolidação por Categoria
             const catTotals = {};
             categories.forEach(cat => catTotals[cat] = 0);
             currentPeriodExpenses.forEach(exp => {
@@ -1651,19 +1644,19 @@
             const sortedCategories = Object.entries(catTotals).sort((a,b) => b[1] - a[1]).filter(item => item[1] > 0);
 
             if (sortedCategories.length === 0) {
-                progressContainer.innerHTML = `<p class="text-center text-xs py-6 text-slate-400">Nenhuma transação registrada neste período.</p>`;
+                progressContainer.innerHTML = `<p class="text-center text-[10px] py-4 text-slate-400">Nenhuma transação registrada neste período.</p>`;
                 return;
             }
 
             progressContainer.innerHTML = sortedCategories.map(([catName, amount]) => {
                 const percentage = totalSum > 0 ? (amount / totalSum) * 100 : 0;
                 return `
-                    <div class="space-y-1">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-extrabold text-slate-500 uppercase text-[9px]">${catName}</span>
-                            <span class="font-bold text-slate-900 text-[11px]">R$ ${amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span class="text-[8px] text-slate-400 font-medium">(${percentage.toFixed(0)}%)</span></span>
+                    <div class="space-y-0.5">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="font-extrabold text-slate-500 uppercase text-[8px]">${catName}</span>
+                            <span class="font-bold text-slate-900 text-[9px]">R$ ${amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span class="text-[7px] text-slate-400 font-medium">(${percentage.toFixed(0)}%)</span></span>
                         </div>
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
                             <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
                         </div>
                     </div>
@@ -1695,9 +1688,9 @@
             });
 
             userAnnualContainer.innerHTML = Object.entries(userTotals).map(([name, sum]) => `
-                <div class="bg-white p-4 rounded-3xl border border-slate-155 shadow-sm flex flex-col justify-between">
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">${name}</span>
-                    <span class="text-xs font-black text-slate-800 mt-1">R$ ${sum.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                <div class="bg-white p-3 rounded-2xl border border-slate-155 shadow-sm flex flex-col justify-between">
+                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider">${name}</span>
+                    <span class="text-[10px] font-black text-slate-800 mt-0.5">R$ ${sum.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                 </div>
             `).join('');
 
@@ -1713,13 +1706,13 @@
                 const heightPercentage = (val / maxMonthVal) * 100;
                 return `
                     <div class="flex-1 flex flex-col items-center group relative h-full justify-end select-none">
-                        <div class="absolute -top-7 scale-0 group-hover:scale-100 transition-transform bg-slate-800 text-white font-bold text-[8px] py-1 px-1.5 rounded whitespace-nowrap shadow-md z-30 pointer-events-none">
+                        <div class="absolute -top-7 scale-0 group-hover:scale-100 transition-transform bg-slate-800 text-white font-bold text-[7px] py-0.5 px-1 rounded whitespace-nowrap shadow-md z-30 pointer-events-none">
                             R$ ${val.toLocaleString('pt-BR', {maximumFractionDigits: 0})}
                         </div>
-                        <div class="w-full bg-emerald-100 rounded-t-lg relative overflow-hidden transition-all duration-500 hover:bg-emerald-600/30" style="height: ${heightPercentage}%">
+                        <div class="w-full bg-emerald-100 rounded-t relative overflow-hidden transition-all duration-500 hover:bg-emerald-600/30" style="height: ${heightPercentage}%">
                             <div class="absolute bottom-0 left-0 right-0 bg-emerald-600 transition-all" style="height: 100%"></div>
                         </div>
-                        <span class="text-[7px] font-black text-slate-400 uppercase tracking-wider mt-1.5">${monthNames[idx].substring(0,3)}</span>
+                        <span class="text-[6px] font-black text-slate-400 uppercase tracking-wider mt-1">${monthNames[idx].substring(0,3)}</span>
                     </div>
                 `;
             }).join('');
@@ -1733,39 +1726,39 @@
             userList.innerHTML = users.map(u => {
                 const cardsHtml = u.cards && u.cards.length > 0
                     ? u.cards.map(c => `
-                        <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded px-1.5 py-0.5 text-[9px] font-bold">
+                        <span class="inline-flex items-center gap-0.5 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded px-1 py-0.5 text-[8px] font-bold">
                             💳 ${c}
                             <button onclick="removeCardFromUser('${u.id}', '${c}')" class="text-emerald-400 hover:text-red-500 transition-colors ml-0.5 font-bold">×</button>
                         </span>
                       `).join('')
-                    : `<span class="text-[9px] text-slate-400 italic">Sem cartões associados</span>`;
+                    : `<span class="text-[8px] text-slate-400 italic font-medium">Sem cartões</span>`;
 
                 return `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-100 space-y-3 shadow-sm">
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 space-y-2 shadow-sm">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs font-black text-slate-700 uppercase tracking-wide">${u.name}</p>
-                                <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                <p class="text-[10px] font-black text-slate-700 uppercase tracking-wide">${u.name}</p>
+                                <div class="flex flex-wrap gap-1 mt-1">
                                     ${cardsHtml}
                                 </div>
                             </div>
-                            <button onclick="deleteUser('${u.id}')" class="text-slate-300 hover:text-red-500 transition-colors p-1">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            <button onclick="deleteUser('${u.id}')" class="text-slate-300 hover:text-red-500 transition-colors p-0.5">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
-                        <div class="flex gap-1.5 pt-2 border-t border-slate-100">
+                        <div class="flex gap-1.5 pt-1.5 border-t border-slate-100">
                             <input 
                                 type="text" 
                                 id="add-card-input-${u.id}"
-                                placeholder="Final do cartão (4 dígitos)..." 
-                                class="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-[9px] px-2 py-1.5 outline-none focus:ring-1 focus:ring-emerald-500/30"
+                                placeholder="Final (4 dígitos)..." 
+                                class="flex-1 bg-slate-50 border border-slate-200 rounded-lg text-[8px] px-1.5 py-1 outline-none focus:ring-1 focus:ring-emerald-500/30"
                                 maxlength="4"
                             />
                             <button 
                                 onclick="addCardToUser('${u.id}')"
-                                class="bg-slate-800 text-white px-2.5 py-1.5 rounded-lg text-[8px] font-black uppercase hover:bg-slate-700 active:scale-95 transition-all flex items-center gap-1"
+                                class="bg-slate-800 text-white px-2 py-1 rounded-lg text-[8px] font-black uppercase hover:bg-slate-700 active:scale-95 transition-all flex items-center gap-0.5"
                             >
-                                <i data-lucide="plus" class="w-3 h-3"></i> Add
+                                <i data-lucide="plus" class="w-2.5 h-2.5"></i> Add
                             </button>
                         </div>
                     </div>
@@ -1773,9 +1766,9 @@
             }).join('');
 
             catList.innerHTML = categories.map(c => `
-                <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-100 shadow-sm pl-2.5 pr-1.5 py-1 rounded-full text-[9px] font-black text-slate-600 uppercase">
+                <span class="inline-flex items-center gap-1 bg-slate-50 border border-slate-100 shadow-sm pl-2 pr-1 py-0.5 rounded-full text-[8px] font-black text-slate-600 uppercase">
                     ${c}
-                    <button onclick="deleteCategory('${c}')" class="text-slate-300 hover:text-red-500 transition-colors p-0.5"><i data-lucide="x" class="w-3 h-3"></i></button>
+                    <button onclick="deleteCategory('${c}')" class="text-slate-300 hover:text-red-500 transition-colors p-0.5"><i data-lucide="x" class="w-2.5 h-2.5"></i></button>
                 </span>
             `).join('');
             lucide.createIcons();
@@ -1817,7 +1810,6 @@
             }
         }
 
-        // Criar Usuário
         function handleCreateUser() {
             const inputName = document.getElementById('new-user-input');
             const inputCard = document.getElementById('new-user-card');
@@ -1855,7 +1847,6 @@
             showToast("Usuário deletado");
         }
 
-        // Criar Categoria
         function handleCreateCategory() {
             const input = document.getElementById('new-category-input');
             const cat = input.value.trim();
@@ -1891,7 +1882,6 @@
             }
         }
 
-        // Ocultar/Exibir elementos
         function toggleElement(id, show) {
             const el = document.getElementById(id);
             if (show) {
