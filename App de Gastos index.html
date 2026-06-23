@@ -17,7 +17,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; /* Slate 900 de fundo para destacar o mockup */
+            background-color: #0f172a; /* Slate 900 de fundo */
         }
         
         @keyframes scan-line {
@@ -91,7 +91,7 @@
                         <i data-lucide="calculator" class="w-5 h-5 text-emerald-300"></i>
                     </div>
                     <div>
-                        <h1 class="text-[8px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
+                        <h1 class="text-[10px] font-black tracking-widest uppercase text-emerald-200">Controle de Gastos</h1>
                         <p class="text-base font-extrabold tracking-tight" id="display-date-title">Janeiro, 2026</p>
                     </div>
                 </div>
@@ -404,6 +404,29 @@
 
     </div>
 
+    <!-- MODAL DE OPÇÕES DE COMPROVANTE (VER OU BAIXAR) -->
+    <div id="receipt-options-modal" class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-end sm:justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-[360px] p-5 space-y-4 animate-in slide-in-from-bottom duration-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <i data-lucide="file-text" class="w-4.5 h-4.5 text-emerald-600"></i> Comprovante
+                </h3>
+                <button onclick="closeReceiptOptions()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-600 font-medium">O que você deseja fazer com este comprovante?</p>
+            <div class="grid grid-cols-2 gap-3">
+                <button id="btn-view-receipt" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-xl text-xs uppercase transition-all tap-feedback flex items-center justify-center gap-1.5">
+                    <i data-lucide="eye" class="w-4 h-4"></i> Ver
+                </button>
+                <button id="btn-download-receipt" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase transition-all tap-feedback flex items-center justify-center gap-1.5">
+                    <i data-lucide="download" class="w-4 h-4"></i> Baixar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- OVERLAY DO SCANNER AO VIVO -->
     <div id="scanner-modal" class="fixed-scanner-modal fixed inset-0 z-50 bg-black hidden flex-col items-center justify-center max-w-[420px] mx-auto">
         <div class="relative w-full aspect-[3/4] bg-slate-950 overflow-hidden">
@@ -608,21 +631,23 @@
             let estabelecimento = "Estabelecimento Desconhecido";
             let valor = 0.00;
             let usuario = users[0]?.name || "Usuário";
-            let categoria = "Mercado"; 
+            let categoria = categories[0] || "Mercado"; // Apenas o padrão das categorias
             let dataCompra = new Date().toISOString().split('T')[0];
             let cartaoDetectado = "";
 
-            // 1. REGEX DE CARTÃO: últimos 4 dígitos pós exatamente 14 asteriscos
-            const asteriskCardRegex = /\*{14}(\d{4})\b/;
-            const asteriskMatches = rawText.match(asteriskCardRegex);
-
-            if (asteriskMatches && asteriskMatches[1]) {
-                cartaoDetectado = asteriskMatches[1];
-            } else {
-                const fallbackCardRegex = /(?:\*{10,}|X{10,})\s*(\d{4})\b/i;
-                const fallbackMatches = rawText.match(fallbackCardRegex);
-                if (fallbackMatches && fallbackMatches[1]) {
-                    cartaoDetectado = fallbackMatches[1];
+            // 1. RECONHECER APENAS: 4 últimos dígitos do cartão (se houver)
+            const cardRegexes = [
+                /\*{12,}(\d{4})\b/,
+                /(?:cartao|card|debito|credito|visa|master|elo|hiper)[^\n]{0,30}\b(\d{4})\b/i,
+                /\b\d{4}\s\d{4}\s\d{4}\s(\d{4})\b/,
+                /\b\d{4}\.\d{4}\.\d{4}\.(\d{4})\b/
+            ];
+            
+            for (const regex of cardRegexes) {
+                const match = rawText.match(regex);
+                if (match && match[1]) {
+                    cartaoDetectado = match[1];
+                    break;
                 }
             }
 
@@ -635,173 +660,93 @@
                 }
             }
 
-            // 2. REGEX DE DATA DO CUPOM: segue como dia, mês e ano
-            const ptMonthDateRegex = /\b(\d{1,2})[\/\.-](jan|fev|mar|abr|mai|may|jun|jul|ago|set|out|nov|dez)[^\d\s]*[\/\.-](\d{2,4})\b/i;
-            const ptMonthMatch = rawText.match(ptMonthDateRegex);
-
-            if (ptMonthMatch) {
-                let d = parseInt(ptMonthMatch[1]);
-                let mStr = ptMonthMatch[2].toLowerCase();
-                let y = ptMonthMatch[3];
-                let m = monthsMap[mStr];
-
-                if (d >= 1 && d <= 31 && m) {
-                    if (y.length === 2) y = "20" + y;
-                    const yearInt = parseInt(y);
-                    if (yearInt >= 2000 && yearInt <= 2040) {
-                        dataCompra = `${y}-${m}-${String(d).padStart(2, '0')}`;
-                    }
-                }
-            } else {
-                const dateRegex = /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{2,4})\b/;
-                const dateMatch = rawText.match(dateRegex);
-                if (dateMatch) {
-                    let d = parseInt(dateMatch[1]);
-                    let m = parseInt(dateMatch[2]);
-                    let y = dateMatch[3];
-
+            // 2. RECONHECER APENAS: Data
+            const dateRegexes = [
+                /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{4})\b/,
+                /\b(\d{2})[\/\.-](\d{2})[\/\.-](\d{2})\b/
+            ];
+            for (const regex of dateRegexes) {
+                const match = rawText.match(regex);
+                if (match) {
+                    let d = parseInt(match[1]);
+                    let m = parseInt(match[2]);
+                    let y = match[3];
                     if (d >= 1 && d <= 31 && m >= 1 && m <= 12) {
                         if (y.length === 2) y = "20" + y;
                         const yearInt = parseInt(y);
                         if (yearInt >= 2000 && yearInt <= 2040) {
                             dataCompra = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                            break;
                         }
                     }
                 }
             }
 
-            // 3. REGEX DO ESTABELECIMENTO: sempre junto com o número de CPF ou CNPJ
-            const cpfRegex = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
-            const cnpjRegex = /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/;
-            
-            let cpfCnpjIndex = -1;
-            for (let i = 0; i < lines.length; i++) {
-                if (cpfRegex.test(lines[i]) || cnpjRegex.test(lines[i]) || lines[i].toLowerCase().includes("cpf") || lines[i].toLowerCase().includes("cnpj")) {
-                    cpfCnpjIndex = i;
-                    break;
+            // 3. RECONHECER APENAS: Valor total (prioridade máxima para o valor total em destaque)
+            let foundValues = [];
+            const allPrices = rawText.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/g);
+            if (allPrices) {
+                allPrices.forEach(str => {
+                    const val = parseNumber(str);
+                    if (val > 0 && val < 5000) {
+                        foundValues.push(val);
+                    }
+                });
+            }
+
+            let totalCandidate = 0;
+            for (const line of lines) {
+                if (/(?:total|pago|pague|liquido|vlr|val|sum)/i.test(line)) {
+                    const lineMatch = line.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/);
+                    if (lineMatch) {
+                        const val = parseNumber(lineMatch[1]);
+                        if (val > totalCandidate && val < 5000) {
+                            totalCandidate = val;
+                        }
+                    }
                 }
             }
 
-            if (cpfCnpjIndex !== -1) {
-                if (cpfCnpjIndex > 0) {
-                    let candidate = lines[cpfCnpjIndex - 1].trim();
-                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
-                    if (candidate.length > 2) {
-                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-                    }
-                } else if (cpfCnpjIndex < lines.length - 1) {
-                    let candidate = lines[cpfCnpjIndex + 1].trim();
-                    candidate = candidate.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
-                    if (candidate.length > 2) {
-                        estabelecimento = candidate.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-                    }
-                }
-            } else {
-                // Fallback legado caso não encontre CPF ou CNPJ na nota
-                const blacklistRegex = /(cnpj|ie|im|telefone|tel|rua|av\.|avenida|bairro|cep|fone|data|hora|cupom|fiscal|extrato|comprovante|venda|original|via|coo|ccf|val|pago|danfe|documento|auxiliar|nfc|site|sefaz|www\.|emiss|operador|caixa|terminal|autentic|filiacao|adquirente|transacao|credito|debito|tef|pos|mastercard|visa|elo|hipercard|label|aid|nsu|snpos|arqc)/i;
-                const phoneCnpjRegex = /(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{4,5}-\d{4})/g;
+            if (totalCandidate > 0) {
+                valor = totalCandidate;
+            } else if (foundValues.length > 0) {
+                valor = Math.max(...foundValues);
+            }
 
-                let candidateName = "";
-                for (const line of lines) {
-                    const cleanLine = line.trim();
-                    if (cleanLine.length > 3 && 
-                        /^[A-Z\s\.\-\&\(\)\/]+$/.test(cleanLine) && 
-                        cleanLine.split(/\s+/).length >= 2 &&
-                        !blacklistRegex.test(cleanLine) && 
-                        !phoneCnpjRegex.test(cleanLine) &&
-                        !/\d{2}\/\d{2}\/\d{4}/.test(cleanLine)) {
-                        
-                        candidateName = cleanLine;
+            // 4. RECONHECER APENAS: Nome do estabelecimento
+            const cpfCnpjRegex = /\b(?:\d{3}\.?\d{3}\.?\d{3}-?\d{2}|\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2})\b/;
+            let foundEstablishment = false;
+            
+            for (let i = 0; i < Math.min(lines.length, 10); i++) {
+                const line = lines[i];
+                if (cpfCnpjRegex.test(line) || line.toLowerCase().includes("cnpj") || line.toLowerCase().includes("cpf")) {
+                    if (i > 0 && lines[i-1].length > 3 && !/cnpj|cpf|data|hora|fone|tel/i.test(lines[i-1])) {
+                        estabelecimento = lines[i-1];
+                        foundEstablishment = true;
+                        break;
+                    } else if (i < lines.length - 1 && lines[i+1].length > 3 && !/cnpj|cpf|data|hora|fone|tel/i.test(lines[i+1])) {
+                        estabelecimento = lines[i+1];
+                        foundEstablishment = true;
                         break;
                     }
                 }
-                if (candidateName) {
-                    candidateName = candidateName.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
-                    estabelecimento = candidateName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-                }
             }
 
-            // 4. VALOR DA NOTA: sempre pós um R$ em destaque (Anexo 3)
-            const rsRegex = /R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/i;
-            const rsMatch = rawText.match(rsRegex);
-
-            if (rsMatch && rsMatch[1]) {
-                valor = parseNumber(rsMatch[1]);
-            } else {
-                // Fallback genérico de valor total caso o "R$" falhe na leitura OCR
-                const priceRegex = /(?:r\$|rs\$|\$)?\s*(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/gi;
-                const totalKeywords = /(total|pago|pagar|subtotal|import|valor|liquido|debito|credito|vlr tot|vlr)/i;
-                let potentialValues = [];
-
+            if (!foundEstablishment) {
                 for (const line of lines) {
-                    if (totalKeywords.test(line)) {
-                        if (line.replace(/[^\d]/g, '').length > 20) continue; 
-                        
-                        const matchedPrices = line.match(priceRegex);
-                        if (matchedPrices) {
-                            matchedPrices.forEach(str => {
-                                const val = parseNumber(str);
-                                if (val > 0 && val < 9999) potentialValues.unshift(val);
-                            });
-                        }
+                    if (line.length > 4 && !/cupom|fiscal|extrato|comprovante|venda|danfe|sefaz|original|via/i.test(line)) {
+                        estabelecimento = line;
+                        break;
                     }
-                }
-
-                if (potentialValues.length === 0) {
-                    const allPrices = rawText.match(priceRegex);
-                    if (allPrices) {
-                        allPrices.forEach(str => {
-                            const val = parseNumber(str);
-                            if (val > 0 && val < 5000) potentialValues.push(val);
-                        });
-                    }
-                }
-
-                if (potentialValues.length > 0) {
-                    valor = Math.max(...potentialValues);
                 }
             }
 
-            // 5. DICIONÁRIO DE CATEGORIZAÇÃO
-            const categoryLexicon = {
-                'Aluguel': ['aluguel', 'locacao', 'condominio', 'imobiliaria'],
-                'Beleza': ['salao', 'cabeleireiro', 'barba', 'barbearia', 'estetica', 'cosmeticos', 'boticario', 'natura'],
-                'Casa': ['leroy', 'decoracao', 'moveis', 'construcao', 'casa', 'multicoisas'],
-                'Combustível': ['posto', 'combustivel', 'gasolina', 'etanol', 'diesel', 'petrobras', 'ipiranga', 'shell', 'auto posto'],
-                'Energia': ['enel', 'cemig', 'luz', 'energia'],
-                'Feira': ['feira', 'fruta', 'verdura', 'legume', 'hortifruti', 'pomar'],
-                'Fast Food': ['mcdonalds', 'burger king', 'subway', 'bobs', 'kfc', 'milkshake', 'habibs'],
-                'Delivery': ['ifood', 'rappi', 'ubereats', 'delivery'],
-                'Mercado': ['market', 'mercado', 'supermercado', 'hipermercado', 'atacado', 'carrefour', 'pao de acucar', 'extra', 'assai', 'atacadao', 'compras', 'mercearia'],
-                'Farmácia': ['drogaria', 'farmacia', 'remedio', 'medicamento', 'pague menos', 'raia', 'drogasil'],
-                'Internet': ['internet', 'fibra', 'net', 'claro', 'vivo'],
-                'Padaria': ['padaria', 'panificadora', 'pao', 'panificacao', 'confeitaria', 'bolo'],
-                'Pets': ['pet', 'petshop', 'veterinaria', 'racao', 'cachorro', 'gato']
-            };
-
-            let bestCategory = categories[0] || 'Mercado';
-            let maxScore = -1;
-
-            for (const cat of categories) {
-                const lexicon = categoryLexicon[cat] || [cat.toLowerCase()];
-                let score = 0;
-                lexicon.forEach(term => {
-                    const pattern = new RegExp('\\b' + term + '\\b', 'gi');
-                    const matches = textLower.match(pattern);
-                    if (matches) score += matches.length * 2.0; 
-                    if (textLower.includes(term)) score += 0.5; 
-                });
-
-                if (score > maxScore) {
-                    maxScore = score;
-                    bestCategory = cat;
-                }
-            }
-
-            if (maxScore > 0) categoria = bestCategory;
+            estabelecimento = estabelecimento.replace(/[^\w\s\-\.\,\&\(\)\/\']/gi, '').trim();
+            if (estabelecimento.length > 40) estabelecimento = estabelecimento.substring(0, 40) + "...";
+            estabelecimento = estabelecimento.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
 
             return {
-                estabelecimento: estabelecimento,
+                estabelecimento: estabelecimento || "Estabelecimento Desconhecido",
                 valor: parseFloat(valor.toFixed(2)),
                 usuario: usuario,
                 categoria: categoria,
@@ -826,7 +771,7 @@
             const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 segundos de timeout de carregamento
+                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 segundos de timeout
 
                 const response = await fetch(proxyUrl, { signal: controller.signal });
                 clearTimeout(timeoutId);
@@ -842,30 +787,44 @@
                 let extractedEstablishment = "";
                 let extractedAmount = null;
                 let extractedDate = "";
+                let extractedCard = "";
 
-                // 1. Tenta extrair Nome do Estabelecimento (razão social / nome fantasia)
-                // Classes de Sefaz de SP, RJ, RS, etc: .txtTopo, #txtTopo, .xNome, #Emitente, .principal
-                const emitenteEl = doc.querySelector('.txtTopo, #txtTopo, .xNome, #Emitente, .principal, .txtRazaoSocial, .text-center h3');
+                // RECONHECER APENAS: Nome do Estabelecimento (razão social / nome fantasia)
+                const emitenteEl = doc.querySelector('.txtTopo, #txtTopo, .xNome, #Emitente, .principal, .txtRazaoSocial, .text-center h3, #lbl_nome_emitente, #headingEmitente');
                 if (emitenteEl) {
                     extractedEstablishment = emitenteEl.innerText.replace(/[\n\r]/g, ' ').replace(/\s+/g, ' ').trim();
                 }
 
-                // 2. Tenta extrair o Valor Total Real da Nota
-                // Classes/IDs de Sefaz mais comuns: .totalNota, .txtMax, #vOficial, #vLiq, .total, #totalNota
-                const valElements = doc.querySelectorAll('.totalNota, .txtMax, .total, #vOficial, #vLiq, .txtVal, td, span');
-                for (let el of valElements) {
-                    const txt = el.innerText.trim();
-                    if (txt.includes('R$') || txt.toLowerCase().includes('total') || txt.toLowerCase().includes('valor pago')) {
-                        const matches = txt.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/);
-                        if (matches) {
-                            extractedAmount = parseNumber(matches[1]);
-                            break;
+                // RECONHECER APENAS: Valor Total Real da Nota
+                const directSelectors = ['.txtMax', '#vOficial', '#vLiq', '#lbl_val_liq', '#lbl_val_tot', '.totalNota', '.txtVal'];
+                for (const selector of directSelectors) {
+                    const el = doc.querySelector(selector);
+                    if (el) {
+                        const txt = el.innerText.trim();
+                        const numMatch = txt.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/);
+                        if (numMatch) {
+                            extractedAmount = parseNumber(numMatch[1]);
+                            if (extractedAmount > 0) break;
                         }
                     }
                 }
 
-                // 3. Tenta extrair a Data de Emissão do cupom
-                const dateEl = doc.querySelector('.txtData, .data, #dataEmissao, td');
+                if (!extractedAmount) {
+                    const valElements = doc.querySelectorAll('.totalNota, .txtMax, .total, #vOficial, #vLiq, .txtVal, td, span, #lbl_val_liq, #lbl_val_tot');
+                    for (let el of valElements) {
+                        const txt = el.innerText.trim();
+                        if (txt.includes('R$') || txt.toLowerCase().includes('total') || txt.toLowerCase().includes('valor pago')) {
+                            const matches = txt.match(/(\d{1,3}(?:\.\d{3})*,\d{2}|\d+[\.,]\d{2})/);
+                            if (matches) {
+                                extractedAmount = parseNumber(matches[1]);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // RECONHECER APENAS: Data de Emissão do cupom
+                const dateEl = doc.querySelector('.txtData, .data, #dataEmissao, td, #lbl_data_emissao, #lbl_emissao');
                 if (dateEl) {
                     const txt = dateEl.innerText;
                     const dateMatch = txt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
@@ -875,7 +834,6 @@
                 }
 
                 if (!extractedDate) {
-                    // Fallback para varredura de texto do body completo caso os elementos div/td falhem
                     const allText = doc.body ? doc.body.innerText : "";
                     const dateMatch = allText.match(/(\d{2})\/(\d{2})\/(\d{4})/);
                     if (dateMatch) {
@@ -883,10 +841,19 @@
                     }
                 }
 
+                // RECONHECER APENAS: 4 últimos dígitos do cartão (se houver no HTML da Sefaz)
+                const htmlText = doc.body ? doc.body.innerText : "";
+                const cardRegex = /(?:cartao|card|debito|credito|visa|master|elo|hiper)[^\n]{0,30}\b(\d{4})\b/i;
+                const cardMatch = htmlText.match(cardRegex);
+                if (cardMatch) {
+                    extractedCard = cardMatch[1];
+                }
+
                 return {
                     estabelecimento: extractedEstablishment || null,
                     valor: extractedAmount,
-                    data: extractedDate || null
+                    data: extractedDate || null,
+                    cartao: extractedCard || null
                 };
             } catch (err) {
                 console.warn("Falha ao acessar Sefaz pelo proxy CORS. Utilizando fallback local da URL.", err);
@@ -902,8 +869,8 @@
             let invoiceNumber = "";
             let cnpj = "";
             let estabelecimento = "NFC-e Sefaz";
+            let cartaoDetectado = "";
 
-            // Primeiro: Tenta extrair tudo o que for possível dos parâmetros locais da URL (contingência offline e rápido)
             const keyRegex = /\b\d{44}\b/;
             let keyMatch = url.match(keyRegex);
 
@@ -1011,13 +978,14 @@
             }
 
             // Segundo: Tentativa ativa de acessar e decodificar a URL via Sefaz usando AllOrigins
-            showToast("Buscando dados no QR Code...", true);
+            showToast("Identificando nota fiscal na fazenda...", true);
             const onlineData = await fetchAndParseNFCe(url);
             if (onlineData) {
                 if (onlineData.estabelecimento) estabelecimento = onlineData.estabelecimento;
                 if (onlineData.valor && onlineData.valor > 0) value = onlineData.valor;
                 if (onlineData.data) dateStr = onlineData.data;
-                showToast("Dados do QR Code carregados com sucesso!");
+                if (onlineData.cartao) cartaoDetectado = onlineData.cartao;
+                showToast("Dados da nota carregados automaticamente!");
             } else {
                 showToast("Preenchido via parâmetros locais do QR Code.");
             }
@@ -1026,9 +994,9 @@
                 estabelecimento: estabelecimento,
                 valor: parseFloat(value.toFixed(2)),
                 usuario: users[0]?.name || "Usuário",
-                categoria: "Mercado",
+                categoria: categories[0] || "Mercado",
                 data: dateStr,
-                cartao: "",
+                cartao: cartaoDetectado,
                 receiptUrl: url
             };
 
@@ -1160,6 +1128,7 @@
             lucide.createIcons();
         }
 
+        // Editar pendências
         function updatePendingField(id, field, value) {
             const item = pendingExpenses.find(p => p.id == id);
             if (item) {
@@ -1232,9 +1201,7 @@
                         category: category,
                         description: `${description} (${i + 1}/${recurrenceMonths})`,
                         amount: amount,
-                        date: `${targetYear}-${String(targetMonth + 1).padStart(2, '0')}-15`,
-                        receiptImage: "",
-                        receiptUrl: ""
+                        date: `${targetYear}-${String(targetMonth + 1).padStart(2, '0')}-15`
                     };
                     expenses.push(newExpense);
                 }
@@ -1246,9 +1213,7 @@
                     category: category,
                     description: description,
                     amount: amount,
-                    date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-15`,
-                    receiptImage: "",
-                    receiptUrl: ""
+                    date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-15`
                 };
                 expenses.push(newExpense);
                 showToast("Lançamento efetuado!");
@@ -1263,45 +1228,74 @@
             playSuccessSound();
         }
 
-        // --- DOWNLOAD E CONSULTA DE COMPROVANTES DO EXTRATO ---
+        // --- SISTEMA DE VISUALIZAÇÃO E DOWNLOAD DE NOTA FISCAL/COMPROVANTE ---
+        let selectedReceiptId = null;
+
+        function openReceiptOptions(id) {
+            selectedReceiptId = id;
+            const modal = document.getElementById('receipt-options-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            document.getElementById('btn-view-receipt').onclick = () => viewReceipt(id);
+            document.getElementById('btn-download-receipt').onclick = () => {
+                downloadReceipt(id);
+                closeReceiptOptions();
+            };
+            lucide.createIcons();
+        }
+
+        function closeReceiptOptions() {
+            const modal = document.getElementById('receipt-options-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            selectedReceiptId = null;
+        }
+
+        function viewReceipt(id) {
+            const exp = expenses.find(e => e.id == id);
+            if (!exp) return;
+            
+            closeReceiptOptions();
+
+            const textContent = `COMPROVANTE DIGITAL DE LANÇAMENTO\n==================================\nID Transação: ${exp.id}\nLocal/Estabelecimento: ${exp.description}\nData do Lançamento: ${exp.date}\nValor: R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\nMembro Familiar: ${exp.user}\nCategoria do Gasto: ${exp.category}\n==================================\nGerado via CG Controle de Gastos Inteligente`;
+            
+            const viewWindow = window.open();
+            if (viewWindow) {
+                viewWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Comprovante - ${exp.description}</title>
+                        <style>
+                            body { font-family: 'Courier New', Courier, monospace; background: #f1f5f9; padding: 20px; color: #1e293b; display: flex; justify-content: center; align-items: center; min-height: 90vh; }
+                            pre { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; max-width: 500px; width: 100%; white-space: pre-wrap; line-height: 1.5; }
+                        </style>
+                    </head>
+                    <body>
+                        <pre>${textContent}</pre>
+                    </body>
+                    </html>
+                `);
+                viewWindow.document.close();
+            } else {
+                showToast("Janela bloqueada pelo navegador.");
+            }
+        }
+
         function downloadReceipt(id) {
             const exp = expenses.find(e => e.id == id);
             if (!exp) return;
 
-            if (exp.receiptImage) {
-                // Se possui imagem do cupom físico, faz download direto
-                const link = document.createElement('a');
-                link.href = exp.receiptImage;
-                link.download = `comprovante_${exp.description.replace(/\s+/g, '_')}_${exp.date}.jpg`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast("Comprovante baixado!");
-            } else if (exp.receiptUrl) {
-                // Se possui URL do QR Code / NFC-e, abre o link no navegador e baixa dados estruturados em arquivo
-                window.open(exp.receiptUrl, '_blank');
-                
-                const textContent = `COMPROVANTE DE GASTO NFC-e\n==================================\nLocal: ${exp.description}\nData: ${exp.date}\nValor: R$ ${exp.amount.toFixed(2)}\nUsuário: ${exp.user}\nCategoria: ${exp.category}\nLink de Consulta Oficial: ${exp.receiptUrl}\n==================================\nGerado via CG Controle de Gastos Inteligente`;
-                const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `dados_nfce_${exp.description.replace(/\s+/g, '_')}_${exp.date}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast("Consulta aberta e detalhes baixados!");
-            } else {
-                // Lançamentos manuais sem anexo geram um recibo digital formatado
-                const textContent = `COMPROVANTE DIGITAL DE LANÇAMENTO\n==================================\nID Transação: ${exp.id}\nLocal/Estabelecimento: ${exp.description}\nData do Lançamento: ${exp.date}\nValor: R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\nMembro Familiar: ${exp.user}\nCategoria do Gasto: ${exp.category}\n==================================\nGerado via CG Controle de Gastos Inteligente`;
-                const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `comprovante_digital_${exp.description.replace(/\s+/g, '_')}_${exp.date}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast("Recibo digital baixado!");
-            }
+            const textContent = `COMPROVANTE DIGITAL DE LANÇAMENTO\n==================================\nID Transação: ${exp.id}\nLocal/Estabelecimento: ${exp.description}\nData do Lançamento: ${exp.date}\nValor: R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\nMembro Familiar: ${exp.user}\nCategoria do Gasto: ${exp.category}\n==================================\nGerado via CG Controle de Gastos Inteligente`;
+            
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `comprovante_${exp.description.replace(/\s+/g, '_')}_${exp.date}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Recibo digital baixado!");
         }
 
         // --- RENDERIZAÇÃO DA LISTA DE EXTRATO (TRANSAÇÕES) ---
@@ -1339,22 +1333,20 @@
                                 ${initials}
                             </div>
                             <div>
-                                <h4 class="text-xs font-black text-slate-800 max-w-[150px] truncate">${exp.description}</h4>
+                                <h4 class="text-xs font-black text-slate-800 max-w-[180px] truncate">${exp.description}</h4>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="text-[8px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">${exp.category}</span>
                                     <span class="text-[8px] text-slate-400 font-bold">${formattedDate}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-extrabold text-slate-900 whitespace-nowrap mr-1">R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-                            
-                            <!-- Ícone de Download / Visualização de Nota -->
-                            <button onclick="downloadReceipt('${exp.id}')" class="text-slate-400 hover:text-emerald-600 p-1.5 transition-colors tap-feedback" title="Baixar nota fiscal ou comprovante">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-extrabold text-slate-900 whitespace-nowrap">R$ ${exp.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                            <!-- Botão modificado para abrir o seletor Ver/Baixar -->
+                            <button onclick="openReceiptOptions('${exp.id}')" class="text-slate-400 hover:text-emerald-600 p-1 transition-colors tap-feedback" title="Opções de recibo">
                                 <i data-lucide="download" class="w-4 h-4"></i>
                             </button>
-                            
-                            <button onclick="deleteExpense('${exp.id}')" class="text-slate-300 hover:text-red-500 p-1 transition-colors tap-feedback">
+                            <button onclick="deleteExpense('${exp.id}')" class="text-slate-300 hover:text-red-500 p-1 transition-colors">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -1370,7 +1362,7 @@
             showToast("Item removido");
         }
 
-        // Tesseract local OCR integrado para uploads de imagens com prioridade para detecção de QR Code
+        // Tesseract local OCR integrado para uploads de imagens com prioridade absoluta para detecção de QR Code sensível
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1383,40 +1375,75 @@
                 img.onload = async function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
                     
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    let qrCodeFound = false;
-                    
-                    // Prioriza a decodificação do QR Code de forma nativa e rápida
-                    if (window.jsQR) {
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
-                        if (code && code.data) {
-                            qrCodeFound = true;
-                            showToast("QR Code detectado! Acessando dados...", false);
-                            await processNFCeUrl(code.data, e.target.result);
-                            return;
+                    const maxScanDimension = 800;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxScanDimension) {
+                            height = Math.round(height * (maxScanDimension / width));
+                            width = maxScanDimension;
+                        }
+                    } else {
+                        if (height > maxScanDimension) {
+                            width = Math.round(width * (maxScanDimension / height));
+                            height = maxScanDimension;
                         }
                     }
                     
-                    // Fallback: Processamento convencional por OCR
-                    showToast("Processando imagem por OCR...", true);
+                    width = Math.round(width);
+                    height = Math.round(height);
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // 1ª tentativa: leitura padrão da imagem limpa
+                    ctx.drawImage(img, 0, 0, width, height);
+                    let imageData = ctx.getImageData(0, 0, width, height);
+                    let code = null;
+
+                    if (window.jsQR) {
+                        try {
+                            code = jsQR(imageData.data, width, height, { inversionAttempts: "attemptBoth" });
+                        } catch (qrErr) {
+                            console.warn("jsQR falhou na primeira tentativa de binarização:", qrErr);
+                        }
+
+                        // 2ª tentativa (Sensibilidade Elevada): Se falhar, melhora contraste e desabilita suavização
+                        if (!code) {
+                            ctx.clearRect(0, 0, width, height);
+                            ctx.imageSmoothingEnabled = false;
+                            ctx.filter = "contrast(160%) brightness(105%) grayscale(100%)";
+                            ctx.drawImage(img, 0, 0, width, height);
+                            imageData = ctx.getImageData(0, 0, width, height);
+                            try {
+                                code = jsQR(imageData.data, width, height, { inversionAttempts: "attemptBoth" });
+                            } catch (qrErr) {
+                                console.warn("jsQR falhou na segunda tentativa de binarização de contraste:", qrErr);
+                            }
+                        }
+
+                        if (code && code.data) {
+                            showToast("QR Code detectado! Acessando dados...", false);
+                            await processNFCeUrl(code.data);
+                            hideToast();
+                            return;
+                        }
+                    }
+
+                    // Fallback para processamento OCR de texto caso não encontre nenhum QR Code
+                    showToast("Processando imagem...", true);
                     try {
                         const text = await performLocalOCR(file);
                         const parsedData = regexMappingParser(text);
                         if (parsedData && (parsedData.valor > 0 || parsedData.estabelecimento !== "Estabelecimento Desconhecido")) {
-                            compressImage(img, 300, 400, (compressedBase64) => {
-                                parsedData.receiptImage = compressedBase64;
-                                addPendingItem(parsedData);
-                            });
+                            addPendingItem(parsedData);
                         } else {
-                            showToast("Não foi possível extrair dados legíveis via OCR.");
+                            showToast("Não foi possível detectar dados estruturados na imagem.");
                         }
                     } catch (err) {
                         console.error(err);
-                        showToast("Erro ao processar imagem por OCR.");
+                        showToast("Erro ao ler imagem pelo OCR");
                     }
                     hideToast();
                 };
@@ -1488,17 +1515,38 @@
             if (video.readyState === video.HAVE_ENOUGH_DATA) {
                 const canvas = document.getElementById('scanner-canvas');
                 const ctx = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                
+                const maxScanDimension = 720;
+                let srcWidth = video.videoWidth;
+                let srcHeight = video.videoHeight;
+                let scaleRatio = Math.min(maxScanDimension / srcWidth, maxScanDimension / srcHeight);
+                
+                canvas.width = Math.round(srcWidth * scaleRatio);
+                canvas.height = Math.round(srcHeight * scaleRatio);
+                
+                ctx.imageSmoothingEnabled = false;
+                ctx.mozImageSmoothingEnabled = false;
+                ctx.webkitImageSmoothingEnabled = false;
+                ctx.msImageSmoothingEnabled = false;
+
+                ctx.filter = "contrast(150%) brightness(105%) grayscale(100%)";
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 if (window.jsQR) {
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
-                    if (code) {
-                        stopScanner();
-                        processNFCeUrl(code.data);
-                        return;
+                    try {
+                        const code = jsQR(imageData.data, canvas.width, canvas.height, {
+                            inversionAttempts: "attemptBoth"
+                        });
+                        if (code) {
+                            document.getElementById('scan-input').value = code.data;
+                            stopScanner();
+                            toggleElement('link-input-container', true);
+                            handleLinkProcess();
+                            return;
+                        }
+                    } catch (qrErr) {
+                        console.warn("jsQR encontrou um erro silencioso durante a varredura ao vivo:", qrErr);
                     }
                 }
             }
@@ -1519,33 +1567,41 @@
 
             try {
                 const dataUrl = canvas.toDataURL('image/png');
-                
-                // Prioridade para QR code na foto tirada
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                let code = null;
+
                 if (window.jsQR) {
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    try {
+                        code = jsQR(imageData.data, canvas.width, canvas.height, { inversionAttempts: "attemptBoth" });
+                    } catch (qrErr) {
+                        console.warn("jsQR falhou ao ler foto capturada (Tentativa 1):", qrErr);
+                    }
+
+                    if (!code) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.imageSmoothingEnabled = false;
+                        ctx.filter = "contrast(155%) brightness(105%) grayscale(100%)";
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        try {
+                            code = jsQR(imageData.data, canvas.width, canvas.height, { inversionAttempts: "attemptBoth" });
+                        } catch (qrErr) {
+                            console.warn("jsQR falhou ao ler foto capturada (Tentativa 2):", qrErr);
+                        }
+                    }
+
                     if (code && code.data) {
                         showToast("QR Code detectado! Acessando dados...", false);
-                        await processNFCeUrl(code.data, dataUrl);
+                        await processNFCeUrl(code.data);
+                        hideToast();
                         return;
                     }
                 }
 
-                // OCR como segunda opção
+                // Se não detectar QR Code, avança para o OCR
                 const text = await performLocalOCR(dataUrl);
                 const parsedData = regexMappingParser(text);
-                if (parsedData && (parsedData.valor > 0 || parsedData.estabelecimento !== "Estabelecimento Desconhecido")) {
-                    const img = new Image();
-                    img.onload = function() {
-                        compressImage(img, 300, 400, (compressedBase64) => {
-                            parsedData.receiptImage = compressedBase64;
-                            addPendingItem(parsedData);
-                        });
-                    };
-                    img.src = dataUrl;
-                } else {
-                    showToast("Não foi possível identificar valores legíveis.");
-                }
+                addPendingItem(parsedData);
             } catch (err) {
                 console.error(err);
                 showToast("Erro ao processar foto");
